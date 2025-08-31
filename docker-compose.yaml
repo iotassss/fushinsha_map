@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: web
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./web/.env
+    depends_on:
+      - api
+
+  api:
+    container_name: api
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./api:/app
+    ports:
+      - "2345:2345"
+      - "8080:8080"
+    command: ["air", "-c", ".air.toml"]
+    depends_on:
+      db:
+        condition: service_healthy  # db の healthcheck 成功後に起動
+    env_file:
+      - ./api/.env
+
+  db:
+    container_name: db
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    volumes:
+      # - mysql_data:/var/lib/mysql # Docker の内部ボリューム（docker volume ls で確認可能）
+      - ./mysql_data:/var/lib/mysql # プロジェクトディレクトリの mysql_data/ フォルダに保存
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    env_file:
+      - ./api/.env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:

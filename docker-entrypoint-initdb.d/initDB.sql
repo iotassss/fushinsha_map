@@ -1,0 +1,1 @@
+CREATE DATABASE IF NOT EXISTS fushinsha_db_test;
