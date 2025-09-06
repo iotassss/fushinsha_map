@@ -1,0 +1,261 @@
+openapi: 3.1.0
+info:
+  title: Fushinsha Map API
+  version: 1.0.0
+  description: 不審者情報管理API
+
+servers:
+  - url: /api
+
+paths:
+  /suspicious-persons:
+    get:
+      summary: 指定範囲内の不審者一覧取得
+      parameters:
+        - in: query
+          name: lx
+          schema: { type: number }
+          required: true
+        - in: query
+          name: rx
+          schema: { type: number }
+          required: true
+        - in: query
+          name: ty
+          schema: { type: number }
+          required: true
+        - in: query
+          name: by
+          schema: { type: number }
+          required: true
+      responses:
+        '200':
+          description: 一覧取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuspiciousPersonSummary'
+    post:
+      summary: 不審者の新規登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuspiciousPersonCreate'
+      responses:
+        '201':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuspiciousPersonDetail'
+
+  /suspicious-persons/{uuid}:
+    get:
+      summary: 不審者の詳細情報取得
+      parameters:
+        - in: path
+          name: uuid
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: 詳細取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuspiciousPersonDetail'
+    put:
+      summary: 不審者情報の編集
+      parameters:
+        - in: path
+          name: uuid
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuspiciousPersonUpdate'
+      responses:
+        '200':
+          description: 編集成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuspiciousPersonDetail'
+
+  /suspicious-persons/{uuid}/sighting-count:
+    post:
+      summary: 目撃カウント
+      parameters:
+        - in: path
+          name: uuid
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: カウント追加成功
+
+  /suspicious-persons/{uuid}/sighting-time:
+    post:
+      summary: 目撃時刻の追加
+      parameters:
+        - in: path
+          name: uuid
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: 目撃時刻追加成功
+
+  /auth/signup:
+    post:
+      summary: ユーザー新規登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignup'
+      responses:
+        '201':
+          description: 登録成功
+
+  /auth/login:
+    post:
+      summary: ログイン
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: ログイン成功
+
+  /auth/logout:
+    post:
+      summary: ログアウト
+      responses:
+        '200':
+          description: ログアウト成功
+
+  /me:
+    get:
+      summary: 自分のユーザー情報取得
+      responses:
+        '200':
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: 自分のユーザー情報編集
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: 編集成功
+    delete:
+      summary: 退会
+      responses:
+        '204':
+          description: 退会成功
+
+components:
+  schemas:
+    SuspiciousPersonSummary:
+      type: object
+      properties:
+        uuid: { type: string }
+        location: { type: object }
+        emoji: { type: string }
+        sign: { type: string }
+        sighting_count: { type: integer }
+    SuspiciousPersonDetail:
+      type: object
+      properties:
+        uuid: { type: string }
+        location: { $ref: '#/components/schemas/Location' }
+        emoji: { type: string }
+        sign: { type: string }
+        sighting_count: { type: integer }
+        sighting_time: { type: string, format: date-time }
+        categories:
+          type: array
+          items: { type: string }
+        sightings: { type: integer }
+        sighting_times:
+          type: array
+          items: { type: string, format: date-time }
+        features:
+          type: array
+          items: { type: string }
+    Location:
+      type: object
+      properties:
+        latitude: { type: number }
+        longitude: { type: number }
+        address: { type: string }
+    SuspiciousPersonCreate:
+      type: object
+      properties:
+        location: { $ref: '#/components/schemas/Location' }
+        emoji: { type: string }
+        sign: { type: string }
+        categories:
+          type: array
+          items: { type: string }
+        features:
+          type: array
+          items: { type: string }
+        sighting_time: { type: string, format: date-time }
+    SuspiciousPersonUpdate:
+      type: object
+      properties:
+        emoji: { type: string }
+        sign: { type: string }
+        categories:
+          type: array
+          items: { type: string }
+        features:
+          type: array
+          items: { type: string }
+        sighting_time: { type: string, format: date-time }
+    UserSignup:
+      type: object
+      properties:
+        google_account_id: { type: string }
+    UserLogin:
+      type: object
+      properties:
+        google_account_id: { type: string }
+    User:
+      type: object
+      properties:
+        google_account_id: { type: string }
+    UserUpdate:
+      type: object
+      properties:
+        google_account_id: { type: string }
