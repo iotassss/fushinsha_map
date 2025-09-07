@@ -61,3 +61,11 @@ func (sp SuspiciousPerson) Accessories() Accessories     { return *sp.accessorie
 func (sp SuspiciousPerson) Vehicle() Vehicle             { return *sp.vehicle }
 func (sp SuspiciousPerson) Behavior() Behavior           { return *sp.behavior }
 func (sp SuspiciousPerson) Hairstyle() Hairstyle         { return *sp.hairstyle }
+
+func (sp *SuspiciousPerson) SetSightingCount(count SightingCount) {
+	sp.sightingCount = count
+}
+
+func (sp *SuspiciousPerson) SetSightingTime(time SightingTime) {
+	sp.sightingTime = time
+}
