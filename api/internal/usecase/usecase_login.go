@@ -1,5 +1,7 @@
 package usecase
 
+import "context"
+
 type LoginInputData struct {
 	GoogleAccountID string
 }
@@ -15,6 +17,7 @@ type LoginPresenter interface {
 
 type LoginUsecase interface {
 	Execute(
+		ctx context.Context,
 		input LoginInputData,
 		presenter LoginPresenter,
 	) error

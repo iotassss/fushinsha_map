@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/iotassss/fushinsha-map-api/internal/domain"
+import "context"
 
 type RegisterPersonInputData struct {
 	Latitude      float64
@@ -24,8 +24,8 @@ type RegisterPersonPresenter interface {
 
 type RegisterPersonUsecase interface {
 	Execute(
+		ctx context.Context,
 		input RegisterPersonInputData,
 		presenter RegisterPersonPresenter,
-		personRepo domain.PersonRepository,
 	) error
 }

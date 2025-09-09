@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/iotassss/fushinsha-map-api/internal/domain"
+import "context"
 
 type IncrementSightingCountInputData struct {
 	UserUUID   string
@@ -18,8 +18,8 @@ type IncrementSightingCountPresenter interface {
 
 type IncrementSightingCountUsecase interface {
 	Execute(
+		ctx context.Context,
 		input IncrementSightingCountInputData,
 		presenter IncrementSightingCountPresenter,
-		personRepo domain.PersonRepository,
 	) error
 }

@@ -1,5 +1,7 @@
 package usecase
 
+import "context"
+
 type SignupInputData struct {
 	GoogleAccountID string
 }
@@ -15,6 +17,7 @@ type SignupPresenter interface {
 
 type SignupUsecase interface {
 	Execute(
+		ctx context.Context,
 		input SignupInputData,
 		presenter SignupPresenter,
 	) error
