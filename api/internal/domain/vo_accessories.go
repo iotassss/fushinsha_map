@@ -5,6 +5,7 @@ import "fmt"
 type Accessories string
 
 var allowedAccessories = map[string]struct{}{
+	"":    {},
 	"帽子":  {},
 	"眼鏡":  {},
 	"マスク": {},

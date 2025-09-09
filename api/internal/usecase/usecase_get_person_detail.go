@@ -16,12 +16,12 @@ type PersonDetail struct {
 	SightingTimes []string // ISO8601文字列
 	Categories    []string
 	Features      []string
-	Gender        *string
-	Clothing      *string
-	Accessories   *string
-	Vehicle       *string
-	Behavior      *string
-	Hairstyle     *string
+	Gender        string
+	Clothing      string
+	Accessories   string
+	Vehicle       string
+	Behavior      string
+	Hairstyle     string
 }
 
 type GetPersonDetailOutputData struct {

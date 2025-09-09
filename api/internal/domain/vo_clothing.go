@@ -5,6 +5,7 @@ import "fmt"
 type Clothing string
 
 var allowedClothings = map[string]struct{}{
+	"":    {},
 	"スーツ": {},
 	"制服":  {},
 	"私服":  {},

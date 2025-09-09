@@ -5,6 +5,7 @@ import "fmt"
 type Vehicle string
 
 var allowedVehicles = map[string]struct{}{
+	"":    {},
 	"自転車": {},
 	"バイク": {},
 	"自動車": {},

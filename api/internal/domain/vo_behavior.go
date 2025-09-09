@@ -5,6 +5,7 @@ import "fmt"
 type Behavior string
 
 var allowedBehaviors = map[string]struct{}{
+	"":      {},
 	"徘徊":    {},
 	"大声":    {},
 	"暴力":    {},

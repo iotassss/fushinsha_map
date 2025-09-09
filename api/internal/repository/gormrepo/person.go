@@ -108,12 +108,12 @@ func toDomain(model PersonModel) (domain.Person, error) {
 		sightingCount,
 		sightingTime,
 		coordinates,
-		&gender,
-		&clothing,
-		&accessories,
-		&vehicle,
-		&behavior,
-		&hairstyle,
+		gender,
+		clothing,
+		accessories,
+		vehicle,
+		behavior,
+		hairstyle,
 	), nil
 }
 
@@ -128,22 +128,13 @@ func toModel(person *domain.Person) PersonModel {
 		X:            person.Coordinates().Longitude(),
 		Y:            person.Coordinates().Latitude(),
 		Gender:       person.Gender().String(),
+		Clothing:     person.Clothing().String(),
+		Accessories:  person.Accessories().String(),
+		Vehicle:      person.Vehicle().String(),
+		Behavior:     person.Behavior().String(),
+		Hairstyle:    person.Hairstyle().String(),
 	}
-	if person.Clothing() != nil {
-		personModel.Clothing = person.Clothing().String()
-	}
-	if person.Accessories() != nil {
-		personModel.Accessories = person.Accessories().String()
-	}
-	if person.Vehicle() != nil {
-		personModel.Vehicle = person.Vehicle().String()
-	}
-	if person.Behavior() != nil {
-		personModel.Behavior = person.Behavior().String()
-	}
-	if person.Hairstyle() != nil {
-		personModel.Hairstyle = person.Hairstyle().String()
-	}
+
 	return personModel
 }
 

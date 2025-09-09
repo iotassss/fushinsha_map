@@ -5,6 +5,7 @@ import "fmt"
 type Gender string
 
 var allowedGenders = map[string]struct{}{
+	"":   {},
 	"男性": {},
 	"女性": {},
 	"不明": {},

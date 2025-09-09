@@ -5,6 +5,7 @@ import "fmt"
 type Hairstyle string
 
 var allowedHairstyles = map[string]struct{}{
+	"":    {},
 	"短髪":  {},
 	"長髪":  {},
 	"坊主":  {},
