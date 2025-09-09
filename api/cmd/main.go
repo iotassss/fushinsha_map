@@ -99,13 +99,17 @@ func main() {
 		}
 	}
 
+	// repository
+	personRepo := gormrepo.NewPersonRepository(db)
+
+	// usecase
+	getPersonsInteractor := usecase.NewGetPersonsInteractor(personRepo)
+	getPersonDetailInteractor := usecase.NewGetPersonDetailInteractor(personRepo)
+
 	// handler
 	// loginHandler := handler.NewLoginHandler(db)
-	getPersonsHandler := handler.NewGetPersonsHandler(
-		usecase.NewGetPersonsInteractor(
-			gormrepo.NewPersonRepository(db),
-		),
-	)
+	getPersonsHandler := handler.NewGetPersonsHandler(getPersonsInteractor)
+	getPersonDetailHandler := handler.NewGetPersonDetailHandler(getPersonDetailInteractor)
 
 	// router
 	r := gin.Default()
@@ -151,6 +155,7 @@ func main() {
 			})
 		})
 		api.GET("/persons", getPersonsHandler.Handle)
+		api.GET("/persons/:uuid", getPersonDetailHandler.Handle)
 	}
 
 	// // 認証が必要なAPI
