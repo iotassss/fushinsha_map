@@ -4,14 +4,14 @@ import (
 	"context"
 )
 
-type GetSuspiciousPersonsInputData struct {
+type GetPersonsInputData struct {
 	LX string // 左上X
 	RX string // 右下X
 	TY string // 左上Y
 	BY string // 右下Y
 }
 
-type SuspiciousPersonSummary struct {
+type PersonSummary struct {
 	UUID          string
 	Latitude      float64
 	Longitude     float64
@@ -20,19 +20,19 @@ type SuspiciousPersonSummary struct {
 	SightingCount int
 }
 
-type GetSuspiciousPersonsOutputData struct {
-	Persons []SuspiciousPersonSummary
+type GetPersonsOutputData struct {
+	Persons []PersonSummary
 }
 
-type GetSuspiciousPersonsPresenter interface {
-	Present(outputData GetSuspiciousPersonsOutputData) error
+type GetPersonsPresenter interface {
+	Present(outputData GetPersonsOutputData) error
 	PresentError(err error) error
 }
 
-type GetSuspiciousPersonsUsecase interface {
+type GetPersonsUsecase interface {
 	Execute(
 		ctx context.Context,
-		input GetSuspiciousPersonsInputData,
-		presenter GetSuspiciousPersonsPresenter,
+		input GetPersonsInputData,
+		presenter GetPersonsPresenter,
 	) error
 }

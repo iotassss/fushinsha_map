@@ -3,8 +3,8 @@ package usecase
 import "github.com/iotassss/fushinsha-map-api/internal/domain"
 
 type IncrementSightingCountInputData struct {
-	UserUUID             string
-	SuspiciousPersonUUID string
+	UserUUID   string
+	PersonUUID string
 }
 
 type IncrementSightingCountOutputData struct {
@@ -20,6 +20,6 @@ type IncrementSightingCountUsecase interface {
 	Execute(
 		input IncrementSightingCountInputData,
 		presenter IncrementSightingCountPresenter,
-		suspiciousPersonRepo domain.SuspiciousPersonRepository,
+		personRepo domain.PersonRepository,
 	) error
 }

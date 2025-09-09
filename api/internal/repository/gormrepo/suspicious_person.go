@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type SuspiciousPersonModel struct {
+type PersonModel struct {
 	UUID         string  `gorm:"column:uuid;primaryKey;not null"`
 	Emoji        string  `gorm:"column:emoji;not null"`
 	Sign         string  `gorm:"column:sign;not null"`
@@ -29,78 +29,78 @@ type SuspiciousPersonModel struct {
 	UpdatedAt    time.Time
 }
 
-func (SuspiciousPersonModel) TableName() string {
-	return "suspicious_persons"
+func (PersonModel) TableName() string {
+	return "persons"
 }
 
-type SuspiciousPersonRepository struct {
+type PersonRepository struct {
 	db *gorm.DB
 }
 
-func NewSuspiciousPersonRepository(db *gorm.DB) *SuspiciousPersonRepository {
-	return &SuspiciousPersonRepository{
+func NewPersonRepository(db *gorm.DB) *PersonRepository {
+	return &PersonRepository{
 		db: db,
 	}
 }
 
-func toDomain(model SuspiciousPersonModel) (domain.SuspiciousPerson, error) {
+func toDomain(model PersonModel) (domain.Person, error) {
 	uuid, err := domain.NewUUID(model.UUID)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	emoji, err := domain.NewEmoji(model.Emoji)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	sign, err := domain.NewSign(model.Sign)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	resisterUUID, err := domain.NewUUID(model.ResisterUUID)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	sightingCount, err := domain.NewSightingCount(model.SightedCount)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	st, err := time.Parse("15:04", model.SightingTime)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	sightingTime, err := domain.NewSightingTime(st)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	coordinates, err := domain.NewCoordinates(model.Y, model.X)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	gender, err := domain.NewGender(model.Gender)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	clothing, err := domain.NewClothing(model.Clothing)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	accessories, err := domain.NewAccessories(model.Accessories)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	vehicle, err := domain.NewVehicle(model.Vehicle)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	behavior, err := domain.NewBehavior(model.Behavior)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	hairstyle, err := domain.NewHairstyle(model.Hairstyle)
 	if err != nil {
-		return domain.SuspiciousPerson{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
-	return domain.NewSuspiciousPerson(
+	return domain.NewPerson(
 		uuid,
 		emoji,
 		sign,
@@ -117,8 +117,8 @@ func toDomain(model SuspiciousPersonModel) (domain.SuspiciousPerson, error) {
 	), nil
 }
 
-func toModel(person *domain.SuspiciousPerson) SuspiciousPersonModel {
-	personModel := SuspiciousPersonModel{
+func toModel(person *domain.Person) PersonModel {
+	personModel := PersonModel{
 		UUID:         person.UUID().String(),
 		Emoji:        person.Emoji().String(),
 		Sign:         person.Sign().String(),
@@ -147,8 +147,8 @@ func toModel(person *domain.SuspiciousPerson) SuspiciousPersonModel {
 	return personModel
 }
 
-func (r *SuspiciousPersonRepository) FindInArea(ctx context.Context, area domain.Area) ([]domain.SuspiciousPerson, error) {
-	var models []SuspiciousPersonModel
+func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area) ([]domain.Person, error) {
+	var models []PersonModel
 	err := r.db.WithContext(ctx).
 		Where("x BETWEEN ? AND ? AND y BETWEEN ? AND ?", area.LX(), area.RX(), area.BY(), area.TY()).
 		Find(&models).Error
@@ -156,7 +156,7 @@ func (r *SuspiciousPersonRepository) FindInArea(ctx context.Context, area domain
 		return nil, fmt.Errorf("%w: %v", domain.ErrRepository, err)
 	}
 
-	var result []domain.SuspiciousPerson
+	var result []domain.Person
 	for _, m := range models {
 		p, err := toDomain(m)
 		if err != nil {
@@ -168,8 +168,8 @@ func (r *SuspiciousPersonRepository) FindInArea(ctx context.Context, area domain
 	return result, nil
 }
 
-func (r *SuspiciousPersonRepository) FindByUUID(ctx context.Context, uuid domain.UUID) (*domain.SuspiciousPerson, error) {
-	var model SuspiciousPersonModel
+func (r *PersonRepository) FindByUUID(ctx context.Context, uuid domain.UUID) (*domain.Person, error) {
+	var model PersonModel
 	err := r.db.WithContext(ctx).Where("uuid = ?", uuid.String()).First(&model).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -186,7 +186,7 @@ func (r *SuspiciousPersonRepository) FindByUUID(ctx context.Context, uuid domain
 	return &p, nil
 }
 
-func (r *SuspiciousPersonRepository) Create(ctx context.Context, person *domain.SuspiciousPerson) error {
+func (r *PersonRepository) Create(ctx context.Context, person *domain.Person) error {
 	model := toModel(person)
 	err := r.db.WithContext(ctx).Create(&model).Error
 	if err != nil {
@@ -195,7 +195,7 @@ func (r *SuspiciousPersonRepository) Create(ctx context.Context, person *domain.
 	return nil
 }
 
-func (r *SuspiciousPersonRepository) Update(ctx context.Context, person *domain.SuspiciousPerson) error {
+func (r *PersonRepository) Update(ctx context.Context, person *domain.Person) error {
 	model := toModel(person)
 	tx := r.db.WithContext(ctx).Model(&model).Where("uuid = ?", model.UUID).Updates(&model)
 	if tx.Error != nil {

@@ -1,4 +1,4 @@
-// internal/repository/memory/suspicious_person_repository.go
+// internal/repository/memory/person_repository.go
 package memory
 
 // import (
@@ -7,23 +7,23 @@ package memory
 // 	"github.com/iotassss/fushinsha-map-api/internal/domain"
 // )
 
-// type suspiciousPersonRepository struct {
+// type PersonRepository struct {
 // 	mu    sync.RWMutex
-// 	store map[domain.UUID]*domain.SuspiciousPerson
+// 	store map[domain.UUID]*domain.Person
 // }
 
-// func NewSuspiciousPersonRepository() domain.SuspiciousPersonRepository {
-// 	return &suspiciousPersonRepository{
-// 		store: make(map[domain.UUID]*domain.SuspiciousPerson),
+// func NewPersonRepository() domain.PersonRepository {
+// 	return &personRepository{
+// 		store: make(map[domain.UUID]*domain.Person),
 // 	}
 // }
 
 // // 指定範囲内の不審者一覧取得
-// func (r *suspiciousPersonRepository) FindInArea(area domain.Area) ([]domain.SuspiciousPerson, error) {
+// func (r *personRepository) FindInArea(area domain.Area) ([]domain.Person, error) {
 // 	r.mu.RLock()
 // 	defer r.mu.RUnlock()
 
-// 	var result []domain.SuspiciousPerson
+// 	var result []domain.Person
 // 	for _, p := range r.store {
 // 		coord := p.Coordinates()
 // 		if coord.Longitude() >= area.LX() &&
@@ -37,7 +37,7 @@ package memory
 // }
 
 // // UUIDで不審者詳細取得
-// func (r *suspiciousPersonRepository) FindByUUID(uuid domain.UUID) (*domain.SuspiciousPerson, error) {
+// func (r *personRepository) FindByUUID(uuid domain.UUID) (*domain.Person, error) {
 // 	r.mu.RLock()
 // 	defer r.mu.RUnlock()
 
@@ -49,7 +49,7 @@ package memory
 // }
 
 // // 不審者新規登録
-// func (r *suspiciousPersonRepository) Create(person *domain.SuspiciousPerson) error {
+// func (r *personRepository) Create(person *domain.Person) error {
 // 	r.mu.Lock()
 // 	defer r.mu.Unlock()
 
@@ -61,7 +61,7 @@ package memory
 // }
 
 // // 不審者情報編集
-// func (r *suspiciousPersonRepository) Update(person *domain.SuspiciousPerson) error {
+// func (r *personRepository) Update(person *domain.Person) error {
 // 	r.mu.Lock()
 // 	defer r.mu.Unlock()
 
@@ -73,7 +73,7 @@ package memory
 // }
 
 // // 目撃カウント追加
-// func (r *suspiciousPersonRepository) AddSightingCount(uuid domain.UUID) error {
+// func (r *personRepository) AddSightingCount(uuid domain.UUID) error {
 // 	r.mu.Lock()
 // 	defer r.mu.Unlock()
 
@@ -86,7 +86,7 @@ package memory
 // }
 
 // // 目撃時刻追加
-// func (r *suspiciousPersonRepository) AddSightingTime(uuid domain.UUID, time domain.SightingTime) error {
+// func (r *personRepository) AddSightingTime(uuid domain.UUID, time domain.SightingTime) error {
 // 	r.mu.Lock()
 // 	defer r.mu.Unlock()
 

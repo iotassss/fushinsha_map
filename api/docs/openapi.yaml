@@ -8,7 +8,7 @@ servers:
   - url: /api
 
 paths:
-  /suspicious-persons:
+  /persons:
     get:
       summary: 指定範囲内の不審者一覧取得
       parameters:
@@ -36,7 +36,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SuspiciousPersonSummary'
+                  $ref: '#/components/schemas/PersonSummary'
     post:
       summary: 不審者の新規登録
       requestBody:
@@ -44,16 +44,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SuspiciousPersonCreate'
+              $ref: '#/components/schemas/PersonCreate'
       responses:
         '201':
           description: 登録成功
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuspiciousPersonDetail'
+                $ref: '#/components/schemas/PersonDetail'
 
-  /suspicious-persons/{uuid}:
+  /persons/{uuid}:
     get:
       summary: 不審者の詳細情報取得
       parameters:
@@ -67,7 +67,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuspiciousPersonDetail'
+                $ref: '#/components/schemas/PersonDetail'
     put:
       summary: 不審者情報の編集
       parameters:
@@ -80,16 +80,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SuspiciousPersonUpdate'
+              $ref: '#/components/schemas/PersonUpdate'
       responses:
         '200':
           description: 編集成功
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuspiciousPersonDetail'
+                $ref: '#/components/schemas/PersonDetail'
 
-  /suspicious-persons/{uuid}/sighting-count:
+  /persons/{uuid}/sighting-count:
     post:
       summary: 目撃カウント
       parameters:
@@ -101,7 +101,7 @@ paths:
         '200':
           description: カウント追加成功
 
-  /suspicious-persons/{uuid}/sighting-time:
+  /persons/{uuid}/sighting-time:
     post:
       summary: 目撃時刻の追加
       parameters:
@@ -185,7 +185,7 @@ paths:
 
 components:
   schemas:
-    SuspiciousPersonSummary:
+    PersonSummary:
       type: object
       properties:
         uuid: { type: string }
@@ -193,7 +193,7 @@ components:
         emoji: { type: string }
         sign: { type: string }
         sighting_count: { type: integer }
-    SuspiciousPersonDetail:
+    PersonDetail:
       type: object
       properties:
         uuid: { type: string }
@@ -218,7 +218,7 @@ components:
         latitude: { type: number }
         longitude: { type: number }
         address: { type: string }
-    SuspiciousPersonCreate:
+    PersonCreate:
       type: object
       properties:
         location: { $ref: '#/components/schemas/Location' }
@@ -231,7 +231,7 @@ components:
           type: array
           items: { type: string }
         sighting_time: { type: string, format: date-time }
-    SuspiciousPersonUpdate:
+    PersonUpdate:
       type: object
       properties:
         emoji: { type: string }

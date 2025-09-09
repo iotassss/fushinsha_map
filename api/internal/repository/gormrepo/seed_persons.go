@@ -2,15 +2,15 @@ package gormrepo
 
 import "context"
 
-func (r *SuspiciousPersonRepository) ResetTable(ctx context.Context) error {
-	if err := r.db.WithContext(ctx).Exec("TRUNCATE TABLE suspicious_persons").Error; err != nil {
+func (r *PersonRepository) ResetTable(ctx context.Context) error {
+	if err := r.db.WithContext(ctx).Exec("TRUNCATE TABLE persons").Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *SuspiciousPersonRepository) SeedDummyPersons(ctx context.Context) error {
-	dummyPersons := []SuspiciousPersonModel{
+func (r *PersonRepository) SeedDummyPersons(ctx context.Context) error {
+	dummyPersons := []PersonModel{
 		{
 			UUID: "b3b1c7e2-8c2a-4e2a-9c1a-2b1c7e28c2a4", Emoji: "😀", Sign: "A", ResisterUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789", SightedCount: 5, SightingTime: "12:00",
 			X: 139.6917, Y: 35.6895, Gender: "男性", Clothing: "スーツ", Accessories: "帽子", Vehicle: "自転車", Behavior: "徘徊", Hairstyle: "短髪",

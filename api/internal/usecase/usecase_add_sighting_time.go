@@ -3,8 +3,8 @@ package usecase
 import "github.com/iotassss/fushinsha-map-api/internal/domain"
 
 type AddSightingTimeInputData struct {
-	SuspiciousPersonUUID string
-	Time                 string // ISO8601形式
+	PersonUUID string
+	Time       string // ISO8601形式
 }
 
 type AddSightingTimeOutputData struct {
@@ -20,6 +20,6 @@ type AddSightingTimeUsecase interface {
 	Execute(
 		input AddSightingTimeInputData,
 		presenter AddSightingTimePresenter,
-		suspiciousPersonRepo domain.SuspiciousPersonRepository,
+		personRepo domain.PersonRepository,
 	) error
 }

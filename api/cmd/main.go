@@ -69,7 +69,7 @@ func main() {
 	}
 	err = db.AutoMigrate(
 		&gormrepo.CityModel{},
-		&gormrepo.SuspiciousPersonModel{},
+		&gormrepo.PersonModel{},
 	)
 	if err != nil {
 		slog.Error("failed to migrate database", slog.Any("error", err))
@@ -88,12 +88,12 @@ func main() {
 			slog.Error("failed to seed dummy data", slog.Any("error", err))
 			return
 		}
-		suspiciousPersonRepo := gormrepo.NewSuspiciousPersonRepository(db)
-		if err := suspiciousPersonRepo.ResetTable(ctx); err != nil {
+		personRepo := gormrepo.NewPersonRepository(db)
+		if err := personRepo.ResetTable(ctx); err != nil {
 			slog.Error("failed to reset existing data during dummy data seeding", slog.Any("error", err))
 			return
 		}
-		if err := suspiciousPersonRepo.SeedDummyPersons(ctx); err != nil {
+		if err := personRepo.SeedDummyPersons(ctx); err != nil {
 			slog.Error("failed to seed dummy data", slog.Any("error", err))
 			return
 		}
@@ -101,9 +101,9 @@ func main() {
 
 	// handler
 	// loginHandler := handler.NewLoginHandler(db)
-	getPersonsHandler := handler.NewGetSuspiciousPersonsHandler(
-		usecase.NewGetSuspiciousPersonsInteractor(
-			gormrepo.NewSuspiciousPersonRepository(db),
+	getPersonsHandler := handler.NewGetPersonsHandler(
+		usecase.NewGetPersonsInteractor(
+			gormrepo.NewPersonRepository(db),
 		),
 	)
 

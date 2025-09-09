@@ -2,11 +2,11 @@ package usecase
 
 import "github.com/iotassss/fushinsha-map-api/internal/domain"
 
-type GetSuspiciousPersonDetailInputData struct {
-	SuspiciousPersonUUID string
+type GetPersonDetailInputData struct {
+	PersonUUID string
 }
 
-type SuspiciousPersonDetail struct {
+type PersonDetail struct {
 	UUID          string  // UUID文字列
 	Latitude      float64 // 座標値
 	Longitude     float64
@@ -24,19 +24,19 @@ type SuspiciousPersonDetail struct {
 	Hairstyle     *string
 }
 
-type GetSuspiciousPersonDetailOutputData struct {
-	SuspiciousPerson SuspiciousPersonDetail
+type GetPersonDetailOutputData struct {
+	Person PersonDetail
 }
 
-type GetSuspiciousPersonDetailPresenter interface {
-	Present(outputData GetSuspiciousPersonDetailOutputData) error
+type GetPersonDetailPresenter interface {
+	Present(outputData GetPersonDetailOutputData) error
 	PresentError(err error) error
 }
 
-type GetSuspiciousPersonDetailUsecase interface {
+type GetPersonDetailUsecase interface {
 	Execute(
-		input GetSuspiciousPersonDetailInputData,
-		presenter GetSuspiciousPersonDetailPresenter,
-		suspiciousPersonRepo domain.SuspiciousPersonRepository,
+		input GetPersonDetailInputData,
+		presenter GetPersonDetailPresenter,
+		personRepo domain.PersonRepository,
 	) error
 }

@@ -8,35 +8,35 @@ import (
 	"github.com/iotassss/fushinsha-map-api/internal/usecase"
 )
 
-type GetSuspiciousPersons struct {
-	usecase usecase.GetSuspiciousPersonsUsecase
+type GetPersons struct {
+	usecase usecase.GetPersonsUsecase
 }
 
-func NewGetSuspiciousPersonsHandler(
-	usecase usecase.GetSuspiciousPersonsUsecase,
-) *GetSuspiciousPersons {
-	return &GetSuspiciousPersons{
+func NewGetPersonsHandler(
+	usecase usecase.GetPersonsUsecase,
+) *GetPersons {
+	return &GetPersons{
 		usecase: usecase,
 	}
 }
 
-func (h *GetSuspiciousPersons) Handle(c *gin.Context) {
+func (h *GetPersons) Handle(c *gin.Context) {
 	lx := c.Query("lx")
 	rx := c.Query("rx")
 	ty := c.Query("ty")
 	by := c.Query("by")
 
-	inputData := usecase.GetSuspiciousPersonsInputData{
+	inputData := usecase.GetPersonsInputData{
 		LX: lx,
 		RX: rx,
 		TY: ty,
 		BY: by,
 	}
 
-	presenter := presenter.NewGetSuspiciousPersonsPresenter(c)
+	presenter := presenter.NewGetPersonsPresenter(c)
 
 	if err := h.usecase.Execute(c.Request.Context(), inputData, presenter); err != nil {
-		slog.Error("GetSuspiciousPersons.Handle: usecase.Execute", "error", err)
+		slog.Error("GetPersons.Handle: usecase.Execute", "error", err)
 		return
 	}
 }

@@ -8,20 +8,20 @@ import (
 	"github.com/iotassss/fushinsha-map-api/internal/domain"
 )
 
-type GetSuspiciousPersonsInteractor struct {
-	suspiciousPersonRepo domain.SuspiciousPersonRepository
+type GetPersonsInteractor struct {
+	personRepo domain.PersonRepository
 }
 
-func NewGetSuspiciousPersonsInteractor(suspiciousPersonRepo domain.SuspiciousPersonRepository) *GetSuspiciousPersonsInteractor {
-	return &GetSuspiciousPersonsInteractor{
-		suspiciousPersonRepo: suspiciousPersonRepo,
+func NewGetPersonsInteractor(personRepo domain.PersonRepository) *GetPersonsInteractor {
+	return &GetPersonsInteractor{
+		personRepo: personRepo,
 	}
 }
 
-func (uc *GetSuspiciousPersonsInteractor) Execute(
+func (uc *GetPersonsInteractor) Execute(
 	ctx context.Context,
-	input GetSuspiciousPersonsInputData,
-	presenter GetSuspiciousPersonsPresenter,
+	input GetPersonsInputData,
+	presenter GetPersonsPresenter,
 ) error {
 	lx, err := strconv.ParseFloat(input.LX, 64)
 	if err != nil {
@@ -44,14 +44,14 @@ func (uc *GetSuspiciousPersonsInteractor) Execute(
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrBusinessRule, err))
 	}
-	persons, err := uc.suspiciousPersonRepo.FindInArea(ctx, area)
+	persons, err := uc.personRepo.FindInArea(ctx, area)
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrBusinessRule, err))
 	}
 
-	outputData := GetSuspiciousPersonsOutputData{}
+	outputData := GetPersonsOutputData{}
 	for _, p := range persons {
-		summary := SuspiciousPersonSummary{
+		summary := PersonSummary{
 			UUID:          p.UUID().String(),
 			Latitude:      p.Coordinates().Latitude(),
 			Longitude:     p.Coordinates().Longitude(),

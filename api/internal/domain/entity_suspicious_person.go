@@ -1,6 +1,6 @@
 package domain
 
-type SuspiciousPerson struct {
+type Person struct {
 	uuid          UUID          // UUID
 	emoji         Emoji         // 絵文字
 	sign          Sign          // サイン
@@ -16,7 +16,7 @@ type SuspiciousPerson struct {
 	hairstyle     *Hairstyle    // 髪型
 }
 
-func NewSuspiciousPerson(
+func NewPerson(
 	uuid UUID,
 	emoji Emoji,
 	sign Sign,
@@ -30,8 +30,8 @@ func NewSuspiciousPerson(
 	vehicle *Vehicle,
 	behavior *Behavior,
 	hairstyle *Hairstyle,
-) SuspiciousPerson {
-	return SuspiciousPerson{
+) Person {
+	return Person{
 		uuid:          uuid,
 		emoji:         emoji,
 		sign:          sign,
@@ -48,24 +48,24 @@ func NewSuspiciousPerson(
 	}
 }
 
-func (sp SuspiciousPerson) UUID() UUID                   { return sp.uuid }
-func (sp SuspiciousPerson) Emoji() Emoji                 { return sp.emoji }
-func (sp SuspiciousPerson) Sign() Sign                   { return sp.sign }
-func (sp SuspiciousPerson) RegistrarUUID() UUID          { return sp.registrarUUID }
-func (sp SuspiciousPerson) SightingCount() SightingCount { return sp.sightingCount }
-func (sp SuspiciousPerson) SightingTime() SightingTime   { return sp.sightingTime }
-func (sp SuspiciousPerson) Coordinates() Coordinates     { return sp.coordinates }
-func (sp SuspiciousPerson) Gender() *Gender              { return sp.gender }
-func (sp SuspiciousPerson) Clothing() *Clothing          { return sp.clothing }
-func (sp SuspiciousPerson) Accessories() *Accessories    { return sp.accessories }
-func (sp SuspiciousPerson) Vehicle() *Vehicle            { return sp.vehicle }
-func (sp SuspiciousPerson) Behavior() *Behavior          { return sp.behavior }
-func (sp SuspiciousPerson) Hairstyle() *Hairstyle        { return sp.hairstyle }
+func (sp Person) UUID() UUID                   { return sp.uuid }
+func (sp Person) Emoji() Emoji                 { return sp.emoji }
+func (sp Person) Sign() Sign                   { return sp.sign }
+func (sp Person) RegistrarUUID() UUID          { return sp.registrarUUID }
+func (sp Person) SightingCount() SightingCount { return sp.sightingCount }
+func (sp Person) SightingTime() SightingTime   { return sp.sightingTime }
+func (sp Person) Coordinates() Coordinates     { return sp.coordinates }
+func (sp Person) Gender() *Gender              { return sp.gender }
+func (sp Person) Clothing() *Clothing          { return sp.clothing }
+func (sp Person) Accessories() *Accessories    { return sp.accessories }
+func (sp Person) Vehicle() *Vehicle            { return sp.vehicle }
+func (sp Person) Behavior() *Behavior          { return sp.behavior }
+func (sp Person) Hairstyle() *Hairstyle        { return sp.hairstyle }
 
-func (sp *SuspiciousPerson) SetSightingCount(count SightingCount) {
+func (sp *Person) SetSightingCount(count SightingCount) {
 	sp.sightingCount = count
 }
 
-func (sp *SuspiciousPerson) SetSightingTime(time SightingTime) {
+func (sp *Person) SetSightingTime(time SightingTime) {
 	sp.sightingTime = time
 }
