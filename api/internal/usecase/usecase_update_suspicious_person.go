@@ -2,7 +2,7 @@ package usecase
 
 import "github.com/iotassss/fushinsha-map-api/internal/domain"
 
-type UpdateSuspiciousPersonInputData struct {
+type UpdatePersonInputData struct {
 	UUID         string
 	Emoji        string
 	Sign         string
@@ -11,19 +11,19 @@ type UpdateSuspiciousPersonInputData struct {
 	SightingTime string // ISO8601
 }
 
-type UpdateSuspiciousPersonOutputData struct {
+type UpdatePersonOutputData struct {
 	Success bool
 }
 
-type UpdateSuspiciousPersonPresenter interface {
-	Present(outputData UpdateSuspiciousPersonOutputData) error
+type UpdatePersonPresenter interface {
+	Present(outputData UpdatePersonOutputData) error
 	PresentError(err error) error
 }
 
-type UpdateSuspiciousPersonUsecase interface {
+type UpdatePersonUsecase interface {
 	Execute(
-		input UpdateSuspiciousPersonInputData,
-		presenter UpdateSuspiciousPersonPresenter,
-		suspiciousPersonRepo domain.SuspiciousPersonRepository,
+		input UpdatePersonInputData,
+		presenter UpdatePersonPresenter,
+		personRepo domain.PersonRepository,
 	) error
 }
