@@ -42,11 +42,11 @@ func (uc *GetPersonsInteractor) Execute(
 
 	area, err := domain.NewArea(lx, rx, ty, by)
 	if err != nil {
-		return presenter.PresentError(fmt.Errorf("%w: %v", ErrBusinessRule, err))
+		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
 	persons, err := uc.personRepo.FindInArea(ctx, area)
 	if err != nil {
-		return presenter.PresentError(fmt.Errorf("%w: %v", ErrBusinessRule, err))
+		return presenter.PresentError(fmt.Errorf("%w: %v", ErrInternal, err))
 	}
 
 	outputData := GetPersonsOutputData{}
