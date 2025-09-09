@@ -1,12 +1,14 @@
 package usecase
 
-import "github.com/iotassss/fushinsha-map-api/internal/domain"
+import (
+	"context"
+)
 
 type GetSuspiciousPersonsInputData struct {
-	LX float64 // 左上X
-	RX float64 // 右下X
-	TY float64 // 左上Y
-	BY float64 // 右下Y
+	LX string // 左上X
+	RX string // 右下X
+	TY string // 左上Y
+	BY string // 右下Y
 }
 
 type SuspiciousPersonSummary struct {
@@ -29,8 +31,8 @@ type GetSuspiciousPersonsPresenter interface {
 
 type GetSuspiciousPersonsUsecase interface {
 	Execute(
+		ctx context.Context,
 		input GetSuspiciousPersonsInputData,
 		presenter GetSuspiciousPersonsPresenter,
-		suspiciousPersonRepo domain.SuspiciousPersonRepository,
 	) error
 }

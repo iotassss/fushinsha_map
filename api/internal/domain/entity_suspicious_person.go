@@ -55,12 +55,12 @@ func (sp SuspiciousPerson) RegistrarUUID() UUID          { return sp.registrarUU
 func (sp SuspiciousPerson) SightingCount() SightingCount { return sp.sightingCount }
 func (sp SuspiciousPerson) SightingTime() SightingTime   { return sp.sightingTime }
 func (sp SuspiciousPerson) Coordinates() Coordinates     { return sp.coordinates }
-func (sp SuspiciousPerson) Gender() Gender               { return *sp.gender }
-func (sp SuspiciousPerson) Clothing() Clothing           { return *sp.clothing }
-func (sp SuspiciousPerson) Accessories() Accessories     { return *sp.accessories }
-func (sp SuspiciousPerson) Vehicle() Vehicle             { return *sp.vehicle }
-func (sp SuspiciousPerson) Behavior() Behavior           { return *sp.behavior }
-func (sp SuspiciousPerson) Hairstyle() Hairstyle         { return *sp.hairstyle }
+func (sp SuspiciousPerson) Gender() *Gender              { return sp.gender }
+func (sp SuspiciousPerson) Clothing() *Clothing          { return sp.clothing }
+func (sp SuspiciousPerson) Accessories() *Accessories    { return sp.accessories }
+func (sp SuspiciousPerson) Vehicle() *Vehicle            { return sp.vehicle }
+func (sp SuspiciousPerson) Behavior() *Behavior          { return sp.behavior }
+func (sp SuspiciousPerson) Hairstyle() *Hairstyle        { return sp.hairstyle }
 
 func (sp *SuspiciousPerson) SetSightingCount(count SightingCount) {
 	sp.sightingCount = count

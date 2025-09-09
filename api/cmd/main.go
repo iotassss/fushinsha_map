@@ -9,7 +9,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	handler "github.com/iotassss/fushinsha-map-api/internal/handler/api"
 	"github.com/iotassss/fushinsha-map-api/internal/repository/gormrepo"
+	"github.com/iotassss/fushinsha-map-api/internal/usecase"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -67,6 +69,7 @@ func main() {
 	}
 	err = db.AutoMigrate(
 		&gormrepo.CityModel{},
+		&gormrepo.SuspiciousPersonModel{},
 	)
 	if err != nil {
 		slog.Error("failed to migrate database", slog.Any("error", err))
@@ -75,7 +78,8 @@ func main() {
 
 	// dummy data
 	if env == "development" {
-		cityRepo := gormrepo.NewCityRepository(db, context.Background())
+		ctx := context.Background()
+		cityRepo := gormrepo.NewCityRepository(db, ctx)
 		if err := cityRepo.ResetTable(); err != nil {
 			slog.Error("failed to reset existing data during dummy data seeding", slog.Any("error", err))
 			return
@@ -84,10 +88,24 @@ func main() {
 			slog.Error("failed to seed dummy data", slog.Any("error", err))
 			return
 		}
+		suspiciousPersonRepo := gormrepo.NewSuspiciousPersonRepository(db)
+		if err := suspiciousPersonRepo.ResetTable(ctx); err != nil {
+			slog.Error("failed to reset existing data during dummy data seeding", slog.Any("error", err))
+			return
+		}
+		if err := suspiciousPersonRepo.SeedDummyPersons(ctx); err != nil {
+			slog.Error("failed to seed dummy data", slog.Any("error", err))
+			return
+		}
 	}
 
-	// // handler
+	// handler
 	// loginHandler := handler.NewLoginHandler(db)
+	getPersonsHandler := handler.NewGetSuspiciousPersonsHandler(
+		usecase.NewGetSuspiciousPersonsInteractor(
+			gormrepo.NewSuspiciousPersonRepository(db),
+		),
+	)
 
 	// router
 	r := gin.Default()
@@ -132,6 +150,7 @@ func main() {
 				"cities": result,
 			})
 		})
+		api.GET("/persons", getPersonsHandler.Handle)
 	}
 
 	// // 認証が必要なAPI
