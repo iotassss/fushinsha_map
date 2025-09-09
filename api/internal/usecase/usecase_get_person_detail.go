@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/iotassss/fushinsha-map-api/internal/domain"
+import "context"
 
 type GetPersonDetailInputData struct {
 	PersonUUID string
@@ -35,8 +35,8 @@ type GetPersonDetailPresenter interface {
 
 type GetPersonDetailUsecase interface {
 	Execute(
+		ctx context.Context,
 		input GetPersonDetailInputData,
 		presenter GetPersonDetailPresenter,
-		personRepo domain.PersonRepository,
 	) error
 }
