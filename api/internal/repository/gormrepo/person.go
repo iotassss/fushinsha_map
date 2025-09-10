@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/iotassss/fushinsha-map-api/internal/domain"
 	"gorm.io/gorm"
 )
@@ -17,8 +18,8 @@ type PersonModel struct {
 	ResisterUUID string  `gorm:"column:register_uuid;not null"`
 	SightedCount int     `gorm:"column:sighted_count"`
 	SightingTime string  `gorm:"column:sighting_time"`
-	X            float64 `gorm:"column:x;not null"`
-	Y            float64 `gorm:"column:y;not null"`
+	X            float64 `gorm:"column:x;not null;uniqueIndex:idx_x_y"`
+	Y            float64 `gorm:"column:y;not null;uniqueIndex:idx_x_y"`
 	Gender       string  `gorm:"column:gender"`
 	Clothing     string  `gorm:"column:clothing"`
 	Accessories  string  `gorm:"column:accessories"`
@@ -181,6 +182,9 @@ func (r *PersonRepository) Create(ctx context.Context, person *domain.Person) er
 	model := toModel(person)
 	err := r.db.WithContext(ctx).Create(&model).Error
 	if err != nil {
+		if merr, ok := err.(*mysql.MySQLError); ok && merr.Number == 1062 {
+			return fmt.Errorf("%w: %v", domain.ErrAlreadyExists, err)
+		}
 		return fmt.Errorf("%w: %v", domain.ErrRepository, err)
 	}
 	return nil

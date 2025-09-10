@@ -11,6 +11,12 @@ type RegisterPersonInputData struct {
 	Features      []string
 	SightingTime  string // ISO8601
 	RegistrarUUID string
+	Gender        string
+	Clothing      string
+	Accessories   string
+	Vehicle       string
+	Behavior      string
+	Hairstyle     string
 }
 
 type RegisterPersonOutputData struct {

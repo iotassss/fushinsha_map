@@ -16,5 +16,5 @@ var (
 	// 外部サービス連携エラー 502
 	ErrExternal = errors.New("external service error")
 	// 内部エラー 500
-	ErrInternal = errors.New("internal error")
+	ErrInternal = errors.New("internal service error")
 )

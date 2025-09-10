@@ -39,22 +39,14 @@ func (uc *GetPersonDetailInteractor) Execute(
 			Emoji:         person.Emoji().String(),
 			Sign:          person.Sign().String(),
 			SightingCount: person.SightingCount().Int(),
-			Gender:        toStringPtr(person.Gender()),
-			Clothing:      toStringPtr(person.Clothing()),
-			Accessories:   toStringPtr(person.Accessories()),
-			Vehicle:       toStringPtr(person.Vehicle()),
-			Behavior:      toStringPtr(person.Behavior()),
-			Hairstyle:     toStringPtr(person.Hairstyle()),
+			Gender:        person.Gender().String(),
+			Clothing:      person.Clothing().String(),
+			Accessories:   person.Accessories().String(),
+			Vehicle:       person.Vehicle().String(),
+			Behavior:      person.Behavior().String(),
+			Hairstyle:     person.Hairstyle().String(),
 		},
 	}
 
 	return presenter.Present(output)
-}
-
-func toStringPtr[T any](v *T) *string {
-	if v == nil {
-		return nil
-	}
-	s := fmt.Sprintf("%v", *v)
-	return &s
 }

@@ -105,11 +105,13 @@ func main() {
 	// usecase
 	getPersonsInteractor := usecase.NewGetPersonsInteractor(personRepo)
 	getPersonDetailInteractor := usecase.NewGetPersonDetailInteractor(personRepo)
+	registerPersonInteractor := usecase.NewRegisterPersonInteractor(personRepo)
 
 	// handler
 	// loginHandler := handler.NewLoginHandler(db)
 	getPersonsHandler := handler.NewGetPersonsHandler(getPersonsInteractor)
 	getPersonDetailHandler := handler.NewGetPersonDetailHandler(getPersonDetailInteractor)
+	registerPersonHandler := handler.NewRegisterPersonHandler(registerPersonInteractor)
 
 	// router
 	r := gin.Default()
@@ -156,6 +158,7 @@ func main() {
 		})
 		api.GET("/persons", getPersonsHandler.Handle)
 		api.GET("/persons/:uuid", getPersonDetailHandler.Handle)
+		api.POST("/persons", registerPersonHandler.Handle)
 	}
 
 	// // 認証が必要なAPI
