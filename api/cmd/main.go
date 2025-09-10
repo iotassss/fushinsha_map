@@ -68,7 +68,6 @@ func main() {
 		return
 	}
 	err = db.AutoMigrate(
-		&gormrepo.CityModel{},
 		&gormrepo.PersonModel{},
 	)
 	if err != nil {
@@ -79,15 +78,6 @@ func main() {
 	// dummy data
 	if env == "development" {
 		ctx := context.Background()
-		cityRepo := gormrepo.NewCityRepository(db, ctx)
-		if err := cityRepo.ResetTable(); err != nil {
-			slog.Error("failed to reset existing data during dummy data seeding", slog.Any("error", err))
-			return
-		}
-		if err := cityRepo.SeedDummyCity(); err != nil {
-			slog.Error("failed to seed dummy data", slog.Any("error", err))
-			return
-		}
 		personRepo := gormrepo.NewPersonRepository(db)
 		if err := personRepo.ResetTable(ctx); err != nil {
 			slog.Error("failed to reset existing data during dummy data seeding", slog.Any("error", err))
@@ -135,27 +125,6 @@ func main() {
 		api.GET("/health", func(c *gin.Context) {
 			c.JSON(200, gin.H{
 				"status": "ok",
-			})
-		})
-		api.GET("/cities", func(c *gin.Context) {
-			cityRepo := gormrepo.NewCityRepository(db, context.Background())
-			cities, err := cityRepo.FindAll()
-			if err != nil {
-				slog.Error("failed to get cities", slog.Any("error", err))
-				c.JSON(500, gin.H{
-					"error": "failed to get cities",
-				})
-				return
-			}
-			result := make([]map[string]string, 0, len(cities))
-			for _, city := range cities {
-				result = append(result, map[string]string{
-					"id":   city.ID,
-					"name": city.Name,
-				})
-			}
-			c.JSON(200, gin.H{
-				"cities": result,
 			})
 		})
 		api.GET("/persons", getPersonsHandler.Handle)
