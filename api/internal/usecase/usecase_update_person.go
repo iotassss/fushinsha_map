@@ -5,12 +5,8 @@ import (
 )
 
 type UpdatePersonInputData struct {
-	UUID         string
-	Emoji        string
-	Sign         string
-	Categories   []string
-	Features     []string
-	SightingTime string // ISO8601
+	UUID          string
+	SightingCount int
 }
 
 type UpdatePersonOutputData struct {

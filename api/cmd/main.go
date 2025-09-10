@@ -106,12 +106,14 @@ func main() {
 	getPersonsInteractor := usecase.NewGetPersonsInteractor(personRepo)
 	getPersonDetailInteractor := usecase.NewGetPersonDetailInteractor(personRepo)
 	registerPersonInteractor := usecase.NewRegisterPersonInteractor(personRepo)
+	updatePersonInteractor := usecase.NewUpdatePersonInteractor(personRepo)
 
 	// handler
 	// loginHandler := handler.NewLoginHandler(db)
 	getPersonsHandler := handler.NewGetPersonsHandler(getPersonsInteractor)
 	getPersonDetailHandler := handler.NewGetPersonDetailHandler(getPersonDetailInteractor)
 	registerPersonHandler := handler.NewRegisterPersonHandler(registerPersonInteractor)
+	updatePersonHandler := handler.NewUpdatePersonHandler(updatePersonInteractor)
 
 	// router
 	r := gin.Default()
@@ -159,6 +161,7 @@ func main() {
 		api.GET("/persons", getPersonsHandler.Handle)
 		api.GET("/persons/:uuid", getPersonDetailHandler.Handle)
 		api.POST("/persons", registerPersonHandler.Handle)
+		api.PUT("/persons/:uuid", updatePersonHandler.Handle)
 	}
 
 	// // 認証が必要なAPI

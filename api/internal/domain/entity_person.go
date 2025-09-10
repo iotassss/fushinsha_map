@@ -65,7 +65,3 @@ func (sp Person) Hairstyle() Hairstyle         { return sp.hairstyle }
 func (sp *Person) SetSightingCount(count SightingCount) {
 	sp.sightingCount = count
 }
-
-func (sp *Person) SetSightingTime(time SightingTime) {
-	sp.sightingTime = time
-}
