@@ -1,0 +1,8 @@
+mysql_data/
+*/.env
+TODO.md
+.DS_Store
+tmp/
+.vscode/
+
+*/node_modules/
