@@ -15,5 +15,4 @@ func NewGoogleAccountID(value string) (GoogleAccountID, error) {
 	return GoogleAccountID{value: value}, nil
 }
 
-func (id GoogleAccountID) Value() string { return id.value }
 func (id GoogleAccountID) String() string { return id.value }

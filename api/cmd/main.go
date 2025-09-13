@@ -9,7 +9,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/iotassss/fushinsha-map-api/internal/auth"
 	handler "github.com/iotassss/fushinsha-map-api/internal/handler/api"
+	"github.com/iotassss/fushinsha-map-api/internal/middleware"
 	"github.com/iotassss/fushinsha-map-api/internal/repository/gormrepo"
 	"github.com/iotassss/fushinsha-map-api/internal/usecase"
 	"github.com/joho/godotenv"
@@ -45,9 +47,14 @@ func main() {
 		slog.Error("Missing required environment variables", slog.Any("error", "MYSQL_PASSWORD"))
 		return
 	}
-	dblHost := os.Getenv("DB_HOST")
-	if dblHost == "" {
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
 		slog.Error("Missing required environment variables", slog.Any("error", "DB_HOST"))
+		return
+	}
+	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
+	if googleClientID == "" {
+		slog.Error("Missing required environment variables", slog.Any("error", "GOOGLE_CLIENT_ID"))
 		return
 	}
 
@@ -58,7 +65,7 @@ func main() {
 	slog.SetDefault(logger)
 
 	// database
-	dbDSN := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", mysqlUser, mysqlPassword, dblHost, mysqlDatabase)
+	dbDSN := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", mysqlUser, mysqlPassword, dbHost, mysqlDatabase)
 	if env == "development" {
 		slog.Info("connecting to database", slog.Any("dsn", dbDSN))
 	}
@@ -69,6 +76,7 @@ func main() {
 	}
 	err = db.AutoMigrate(
 		&gormrepo.PersonModel{},
+		&gormrepo.UserModel{},
 	)
 	if err != nil {
 		slog.Error("failed to migrate database", slog.Any("error", err))
@@ -90,16 +98,26 @@ func main() {
 	}
 
 	// repository
+	userRepo := gormrepo.NewUserRepository(db)
 	personRepo := gormrepo.NewPersonRepository(db)
 
+	// auth verifier
+	googleAuthVerifier := auth.NewGoogleAuthVerifier(googleClientID)
+
 	// usecase
+	findAndCreateUserByIDTokenInteractor := usecase.NewFindOrCreateUserByIDTokenInteractor(
+		userRepo,
+		googleAuthVerifier,
+	)
 	getPersonsInteractor := usecase.NewGetPersonsInteractor(personRepo)
 	getPersonDetailInteractor := usecase.NewGetPersonDetailInteractor(personRepo)
 	registerPersonInteractor := usecase.NewRegisterPersonInteractor(personRepo)
 	updatePersonInteractor := usecase.NewUpdatePersonInteractor(personRepo)
 
+	// middleware
+	authMiddleware := middleware.NewAuthMiddleware(findAndCreateUserByIDTokenInteractor)
+
 	// handler
-	// loginHandler := handler.NewLoginHandler(db)
 	getPersonsHandler := handler.NewGetPersonsHandler(getPersonsInteractor)
 	getPersonDetailHandler := handler.NewGetPersonDetailHandler(getPersonDetailInteractor)
 	registerPersonHandler := handler.NewRegisterPersonHandler(registerPersonInteractor)
@@ -118,26 +136,26 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// 認証不要なAPI
+	// APIグループ
 	api := r.Group("/api")
-	{
-		// api.POST("/login", loginHandler)
-		api.GET("/health", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"status": "ok",
-			})
-		})
-		api.GET("/persons", getPersonsHandler.Handle)
-		api.GET("/persons/:uuid", getPersonDetailHandler.Handle)
-		api.POST("/persons", registerPersonHandler.Handle)
-		api.PUT("/persons/:uuid", updatePersonHandler.Handle)
-	}
 
-	// // 認証が必要なAPI
-	// authorized := r.Group("/api")
-	// authorized.Use(middleware.AuthMiddleware())
-	// {
-	// }
+	// 認証不要
+	api.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+		})
+	})
+	api.GET("/persons", getPersonsHandler.Handle)
+	api.GET("/persons/:uuid", getPersonDetailHandler.Handle)
+
+	// 認証が必要なAPI
+	authorized := api.Group("")
+	authorized.Use(authMiddleware.Auth())
+	{
+		authorized.GET("/me")
+		authorized.POST("/persons", registerPersonHandler.Handle)
+		authorized.PUT("/persons/:uuid", updatePersonHandler.Handle)
+	}
 
 	r.Run() // デフォルトで :8080 で起動
 }
