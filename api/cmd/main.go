@@ -111,7 +111,7 @@ func main() {
 	)
 	getPersonsInteractor := usecase.NewGetPersonsInteractor(personRepo)
 	getPersonDetailInteractor := usecase.NewGetPersonDetailInteractor(personRepo)
-	registerPersonInteractor := usecase.NewRegisterPersonInteractor(personRepo)
+	createPersonInteractor := usecase.NewCreatePersonInteractor(personRepo)
 	updatePersonInteractor := usecase.NewUpdatePersonInteractor(personRepo)
 
 	// middleware
@@ -120,7 +120,7 @@ func main() {
 	// handler
 	getPersonsHandler := handler.NewGetPersonsHandler(getPersonsInteractor)
 	getPersonDetailHandler := handler.NewGetPersonDetailHandler(getPersonDetailInteractor)
-	registerPersonHandler := handler.NewRegisterPersonHandler(registerPersonInteractor)
+	createPersonHandler := handler.NewCreatePersonHandler(createPersonInteractor)
 	updatePersonHandler := handler.NewUpdatePersonHandler(updatePersonInteractor)
 
 	// router
@@ -153,7 +153,7 @@ func main() {
 	authorized.Use(authMiddleware.Auth())
 	{
 		authorized.GET("/me")
-		authorized.POST("/persons", registerPersonHandler.Handle)
+		authorized.POST("/persons", createPersonHandler.Handle)
 		authorized.PUT("/persons/:uuid", updatePersonHandler.Handle)
 	}
 
