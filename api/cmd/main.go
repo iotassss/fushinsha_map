@@ -150,7 +150,9 @@ func main() {
 
 	// 認証が必要なAPI
 	authorized := api.Group("")
-	authorized.Use(authMiddleware.Auth())
+	// TODO: 認証機能を適切に実装して以下の処理を有効化する
+	_ = authMiddleware
+	// authorized.Use(authMiddleware.Auth())
 	{
 		authorized.GET("/me")
 		authorized.POST("/persons", createPersonHandler.Handle)
