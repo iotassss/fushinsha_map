@@ -6,12 +6,13 @@ interface LatLngSearchFormProps {
 }
 
 export default function LatLngSearchForm({ center, setCenter }: LatLngSearchFormProps) {
-  const [latlng, setLatlng] = useState<string>(center.join(', '));
+  const [latlng, setLatlng] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // カンマ区切り、スペース有無両対応
-    const parts = latlng.split(',').map(s => s.trim());
+    // カッコを除去し、カンマ区切り、スペース有無両対応
+    const cleaned = latlng.replace(/[()]/g, '');
+    const parts = cleaned.split(',').map(s => s.trim());
     if (parts.length === 2) {
       const newLat = parseFloat(parts[0]);
       const newLng = parseFloat(parts[1]);
