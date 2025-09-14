@@ -7,7 +7,13 @@ import './Map.css';
 
 const Map = () => {
   return (
-    <MapContainer center={[35.681236, 139.767125]} zoom={13} scrollWheelZoom={false}>
+    <MapContainer
+      center={[35.681236, 139.767125]}
+      zoom={13}
+      scrollWheelZoom={true}
+      touchZoom={true}
+      wheelDebounceTime={10}
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
