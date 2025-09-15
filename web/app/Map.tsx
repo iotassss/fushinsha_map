@@ -100,7 +100,29 @@ export default function Map({ center, getPerson }: MapProps) {
           {isPanelOpen ? '←' : '→'}
         </button>
         {/* パネル中身 */}
-        <div style={{ padding: '32px 16px', width: '100%' }}>
+        <div style={{ padding: '32px 16px', width: '100%', position: 'relative' }}>
+          {/* バツボタン */}
+          <button
+            onClick={() => setIsPanelOpen(false)}
+            style={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              width: 32,
+              height: 32,
+              border: 'none',
+              background: 'transparent',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              zIndex: 1200,
+              lineHeight: 1,
+              color: '#777',
+              transition: 'color 0.15s',
+            }}
+            aria-label="閉じる"
+            onMouseOver={e => (e.currentTarget.style.color = '#888')}
+            onMouseOut={e => (e.currentTarget.style.color = '#bbb')}
+          >✕</button>
           {selectedPerson ? (
             <>
               <div style={{ fontSize: '2.5rem', textAlign: 'center', marginBottom: 8 }}>{selectedPerson.emoji}</div>
