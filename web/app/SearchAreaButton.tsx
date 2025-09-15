@@ -19,7 +19,7 @@ export default function SearchAreaButton({ setPersons }: SearchAreaButtonProps) 
     };
     try {
       const res = await axios.get<GetPersonsResponse>('http://localhost:8080/api/persons', { params });
-      setPersons(res.data.persons);
+      setPersons(res.data.persons || []);
     } catch (e) {
       console.error(e);
     }
