@@ -42,7 +42,9 @@ export default function Map({ center }: MapProps) {
         scrollWheelZoom={true}
         touchZoom={true}
         wheelDebounceTime={10}
+        zoomControl={false}
       >
+        <ZoomControl position="bottomright" />
 <SearchAreaButton setPersons={setPersons} />
         <ChangeMapCenter center={center} />
         <TileLayer
