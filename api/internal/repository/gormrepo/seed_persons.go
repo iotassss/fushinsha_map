@@ -27,6 +27,18 @@ func (r *PersonRepository) SeedDummyPersons(ctx context.Context) error {
 			UUID: "e5f6a7b8-9012-4cde-af12-3456789012cd", Emoji: "😅", Sign: "Z", RegisterUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789", SightedCount: 2, SightingTime: "13:30",
 			X: 136.9066, Y: 35.1815, Gender: "女性", Clothing: "制服", Accessories: "バッグ", Vehicle: "自動車", Behavior: "暴力", Hairstyle: "パーマ",
 		},
+		{
+			UUID: "e5f6a7b8-9012-4cde-af12-3456789012ce", Emoji: "😉", Sign: "Z", RegisterUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789", SightedCount: 2, SightingTime: "13:30",
+			X: 139.7528, Y: 35.6855, Gender: "女性", Clothing: "制服", Accessories: "バッグ", Vehicle: "自動車", Behavior: "暴力", Hairstyle: "パーマ",
+		},
+		{
+			UUID: "e5f6a7b8-9012-4cde-af12-3456789012cf", Emoji: "😱", Sign: "Z", RegisterUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789", SightedCount: 2, SightingTime: "13:30",
+			X: 139.7432, Y: 35.6758, Gender: "女性", Clothing: "制服", Accessories: "バッグ", Vehicle: "自動車", Behavior: "暴力", Hairstyle: "パーマ",
+		},
+		{
+			UUID: "e5f6a7b8-9012-4cde-af12-3456789012d1", Emoji: "😇", Sign: "Z", RegisterUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789", SightedCount: 2, SightingTime: "13:30",
+			X: 139.7765, Y: 35.6849, Gender: "女性", Clothing: "制服", Accessories: "バッグ", Vehicle: "自動車", Behavior: "暴力", Hairstyle: "パーマ",
+		},
 	}
 	for _, person := range dummyPersons {
 		if err := r.db.WithContext(ctx).Create(&person).Error; err != nil {
