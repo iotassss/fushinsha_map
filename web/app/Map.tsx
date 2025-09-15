@@ -101,7 +101,7 @@ export default function Map({ center, getPerson }: MapProps) {
         </button>
         {/* パネル中身 */}
         <div style={{ padding: '32px 16px', width: '100%', position: 'relative' }}>
-          {/* バツボタン */}
+          {/* 閉じるボタン */}
           <button
             onClick={() => setIsPanelOpen(false)}
             style={{
