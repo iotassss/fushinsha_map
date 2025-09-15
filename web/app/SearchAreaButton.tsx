@@ -1,7 +1,7 @@
 
 import { useMap } from 'react-leaflet';
 import axios from 'axios';
-import type { PersonSummary } from './types/PersonSummary';
+import type { GetPersonsResponse, PersonSummary } from './types/Persons';
 
 interface SearchAreaButtonProps {
   setPersons: (persons: PersonSummary[]) => void;
@@ -18,20 +18,13 @@ export default function SearchAreaButton({ setPersons }: SearchAreaButtonProps) 
       by: bounds.getSouthWest().lat,
     };
     try {
-      const res = await axios.get('http://localhost:8080/api/persons', { params });
-      const persons = res.data.persons.map((p: any) => ({
-        uuid: p.uuid,
-        latitude: p.latitude,
-        longitude: p.longitude,
-        emoji: p.emoji,
-        sign: p.sign,
-        sightingCount: p.sighting_count, // スネークケースをキャメルケースに変換
-      }));
-      setPersons(persons);
+      const res = await axios.get<GetPersonsResponse>('http://localhost:8080/api/persons', { params });
+      setPersons(res.data.persons);
     } catch (e) {
       console.error(e);
     }
   };
+
   return (
     <button
       onClick={handleClick}

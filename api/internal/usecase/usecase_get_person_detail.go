@@ -7,21 +7,20 @@ type GetPersonDetailInputData struct {
 }
 
 type PersonDetail struct {
-	UUID          string  // UUID文字列
-	Latitude      float64 // 座標値
-	Longitude     float64
-	Emoji         string
-	Sign          string
-	SightingCount int
-	SightingTimes []string // ISO8601文字列
-	Categories    []string
-	Features      []string
-	Gender        string
-	Clothing      string
-	Accessories   string
-	Vehicle       string
-	Behavior      string
-	Hairstyle     string
+	UUID          string   `json:"uuid"`     // UUID文字列
+	Latitude      float64  `json:"latitude"` // 座標値
+	Longitude     float64  `json:"longitude"`
+	Emoji         string   `json:"emoji"`
+	Sign          string   `json:"sign"`
+	SightingCount int      `json:"sighting_count"`
+	SightingTimes []string `json:"sighting_times"` // ISO8601文字列
+	Categories    []string `json:"categories"`
+	Gender        string   `json:"gender"`
+	Clothing      string   `json:"clothing"`
+	Accessories   string   `json:"accessories"`
+	Vehicle       string   `json:"vehicle"`
+	Behavior      string   `json:"behavior"`
+	Hairstyle     string   `json:"hairstyle"`
 }
 
 type GetPersonDetailOutputData struct {

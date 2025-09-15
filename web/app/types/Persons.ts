@@ -4,5 +4,9 @@ export interface PersonSummary {
   longitude: number;
   emoji: string;
   sign: string;
-  sightingCount: number;
+  sighting_count: number;
+}
+
+export interface GetPersonsResponse {
+  persons: PersonSummary[];
 }

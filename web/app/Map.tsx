@@ -1,17 +1,19 @@
 'use client';
 
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import SearchAreaButton from './SearchAreaButton';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import type { PersonSummary } from './types/PersonSummary';
+import type { GetPersonsResponse, PersonSummary } from './types/Persons';
 import './initLeaflet';
 import './Map.css';
+import { GetPersonResponse, Person } from './types/Person';
 
 // centerが変わったら地図を移動するコンポーネント
+// TODO: これはここのファイルにあるのが適切か？
 function ChangeMapCenter({ center }: { center: [number, number] }) {
   const map = useMap();
   useEffect(() => {
@@ -22,15 +24,22 @@ function ChangeMapCenter({ center }: { center: [number, number] }) {
 
 export interface MapProps {
   center: [number, number];
+  getPersons: (uuid: string) => Promise<GetPersonsResponse>;
+  getPerson: (uuid: string) => Promise<GetPersonResponse>;
 }
 
-export default function Map({ center }: MapProps) {
+export default function Map({ center, getPerson }: MapProps) {
   const [persons, setPersons] = useState<PersonSummary[]>([]);
+
+  const handleButtonClick = async (personSummary: PersonSummary) => {
+    const person = await getPerson(personSummary.uuid);
+    console.log('Person:', person);
+  }
 
   useEffect(() => {
     console.log('Persons data updated:', persons);
     persons.forEach(person => {
-      console.log(`Person UUID: ${person.uuid}, Location: (${person.latitude}, ${person.longitude}), Emoji: ${person.emoji}, Sign: ${person.sign}, SightingCount: ${person.sightingCount}`);
+      console.log(`Person UUID: ${person.uuid}, Location: (${person.latitude}, ${person.longitude}), Emoji: ${person.emoji}, Sign: ${person.sign}, SightingCount: ${person.sighting_count}`);
     });
   }, [persons]);
 
@@ -45,13 +54,13 @@ export default function Map({ center }: MapProps) {
         zoomControl={false}
       >
         <ZoomControl position="bottomright" />
-<SearchAreaButton setPersons={setPersons} />
+        <SearchAreaButton setPersons={setPersons} />
         <ChangeMapCenter center={center} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-{/* Emojiを各personの位置に表示 */}
+        {/* Emojiを各personの位置に表示 */}
         {persons.map(person => (
           <Marker
             key={person.uuid}
@@ -63,8 +72,11 @@ export default function Map({ center }: MapProps) {
           >
             <Popup>
               <div>
-                <div>Sign: {person.sign}</div>
-                <div>SightingCount: {person.sightingCount}</div>
+                <div>{person.emoji}サイン:  {person.sign}</div>
+                <div>👀目撃数: {person.sighting_count}</div>
+              </div>
+              <div style={{ marginTop: '8px' }}>
+                <button style={{ cursor: 'pointer' , fontWeight: 'bold' }} onClick={() => handleButtonClick(person)}>👉️詳細を見る</button>
               </div>
             </Popup>
           </Marker>
