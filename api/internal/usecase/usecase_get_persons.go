@@ -12,12 +12,12 @@ type GetPersonsInputData struct {
 }
 
 type PersonSummary struct {
-	UUID          string
-	Latitude      float64
-	Longitude     float64
-	Emoji         string
-	Sign          string
-	SightingCount int
+	UUID          string  `json:"uuid"`
+	Latitude      float64 `json:"latitude"`
+	Longitude     float64 `json:"longitude"`
+	Emoji         string  `json:"emoji"`
+	Sign          string  `json:"sign"`
+	SightingCount int     `json:"sighting_count"`
 }
 
 type GetPersonsOutputData struct {
