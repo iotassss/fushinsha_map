@@ -7,8 +7,6 @@ type CreatePersonInputData struct {
 	Longitude    float64
 	Emoji        string
 	Sign         string
-	Categories   []string
-	Features     []string
 	SightingTime string // ISO8601
 	RegisterUUID string
 	Gender       string

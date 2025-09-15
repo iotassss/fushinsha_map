@@ -6,6 +6,7 @@ import ClientMap from "./ClientMap";
 import LatLngSearchForm from './LatLngSearchForm';
 import { Person, GetPersonResponse } from './types/Person';
 import { GetPersonsResponse, PersonSummary } from './types/Persons';
+import type { CreatePersonPayload } from './types/CreatePersonPayload';
 
 const DEFAULT_CENTER: [number, number] = [35.681236, 139.767125];
 
@@ -29,6 +30,17 @@ const getPerson = async (uuid: string): Promise<GetPersonResponse> => {
   }
 };
 
+const createPerson = async (payload: CreatePersonPayload): Promise<void> => {
+  try {
+    const res = await axios.post('http://localhost:8080/api/persons', payload);
+    if (!res || res.status < 200 || res.status >= 300) {
+      throw new Error('Failed to submit');
+    }
+  } catch (error) {
+    throw new Error('Failed to submit');
+  }
+};
+
 export default function Home() {
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
 
@@ -36,7 +48,12 @@ export default function Home() {
     <>
       <h1>不審者マップ</h1>
       <LatLngSearchForm center={center} setCenter={setCenter} />
-      <ClientMap center={center} getPersons={getPersons} getPerson={getPerson} />
+      <ClientMap
+        center={center}
+        getPersons={getPersons}
+        getPerson={getPerson}
+        createPerson={createPerson}
+      />
     </>
   );
 }

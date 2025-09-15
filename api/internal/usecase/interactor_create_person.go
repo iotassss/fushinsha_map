@@ -44,7 +44,9 @@ func (uc *CreatePersonInteractor) Execute(
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
-	registerUUID, err := domain.NewUUID(input.RegisterUUID)
+	// TODO: 認証機能実装後にコメントアウトを外す
+	// registerUUID, err := domain.NewUUID(input.RegisterUUID)
+	registerUUID, err := domain.NewUUID("a1a2b3c4-d5e6-7f89-0abc-def123456789")
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
