@@ -15,7 +15,7 @@ type PersonModel struct {
 	UUID         string  `gorm:"column:uuid;primaryKey;not null"`
 	Emoji        string  `gorm:"column:emoji;not null"`
 	Sign         string  `gorm:"column:sign;not null"`
-	ResisterUUID string  `gorm:"column:register_uuid;not null"`
+	RegisterUUID string  `gorm:"column:register_uuid;not null"`
 	SightedCount int     `gorm:"column:sighted_count"`
 	SightingTime string  `gorm:"column:sighting_time"`
 	X            float64 `gorm:"column:x;not null;uniqueIndex:idx_x_y"`
@@ -57,7 +57,7 @@ func toDomain(model PersonModel) (domain.Person, error) {
 	if err != nil {
 		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
-	resisterUUID, err := domain.NewUUID(model.ResisterUUID)
+	registerUUID, err := domain.NewUUID(model.RegisterUUID)
 	if err != nil {
 		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
@@ -105,7 +105,7 @@ func toDomain(model PersonModel) (domain.Person, error) {
 		uuid,
 		emoji,
 		sign,
-		resisterUUID,
+		registerUUID,
 		sightingCount,
 		sightingTime,
 		coordinates,
@@ -123,7 +123,7 @@ func toModel(person *domain.Person) PersonModel {
 		UUID:         person.UUID().String(),
 		Emoji:        person.Emoji().String(),
 		Sign:         person.Sign().String(),
-		ResisterUUID: person.RegistrarUUID().String(),
+		RegisterUUID: person.RegisterUUID().String(),
 		SightedCount: person.SightingCount().Int(),
 		SightingTime: person.SightingTime().Time().Format("15:04"),
 		X:            person.Coordinates().Longitude(),

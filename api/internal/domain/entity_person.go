@@ -4,7 +4,7 @@ type Person struct {
 	uuid          UUID          // UUID
 	emoji         Emoji         // 絵文字
 	sign          Sign          // サイン
-	registrarUUID UUID          // 登録者UUID
+	registerUUID  UUID          // 登録者UUID
 	sightingCount SightingCount // 目撃数
 	sightingTime  SightingTime  // 目撃時刻
 	coordinates   Coordinates   // 座標
@@ -20,7 +20,7 @@ func NewPerson(
 	uuid UUID,
 	emoji Emoji,
 	sign Sign,
-	registrarUUID UUID,
+	registerUUID UUID,
 	sightingCount SightingCount,
 	sightingTime SightingTime,
 	coordinates Coordinates,
@@ -35,7 +35,7 @@ func NewPerson(
 		uuid:          uuid,
 		emoji:         emoji,
 		sign:          sign,
-		registrarUUID: registrarUUID,
+		registerUUID:  registerUUID,
 		sightingCount: sightingCount,
 		sightingTime:  sightingTime,
 		coordinates:   coordinates,
@@ -51,7 +51,7 @@ func NewPerson(
 func (sp Person) UUID() UUID                   { return sp.uuid }
 func (sp Person) Emoji() Emoji                 { return sp.emoji }
 func (sp Person) Sign() Sign                   { return sp.sign }
-func (sp Person) RegistrarUUID() UUID          { return sp.registrarUUID }
+func (sp Person) RegisterUUID() UUID           { return sp.registerUUID }
 func (sp Person) SightingCount() SightingCount { return sp.sightingCount }
 func (sp Person) SightingTime() SightingTime   { return sp.sightingTime }
 func (sp Person) Coordinates() Coordinates     { return sp.coordinates }

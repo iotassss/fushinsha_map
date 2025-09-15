@@ -9,20 +9,20 @@ import (
 	"github.com/iotassss/fushinsha-map-api/internal/domain"
 )
 
-type RegisterPersonInteractor struct {
+type CreatePersonInteractor struct {
 	personRepo domain.PersonRepository
 }
 
-func NewRegisterPersonInteractor(personRepo domain.PersonRepository) *RegisterPersonInteractor {
-	return &RegisterPersonInteractor{
+func NewCreatePersonInteractor(personRepo domain.PersonRepository) *CreatePersonInteractor {
+	return &CreatePersonInteractor{
 		personRepo: personRepo,
 	}
 }
 
-func (uc *RegisterPersonInteractor) Execute(
+func (uc *CreatePersonInteractor) Execute(
 	ctx context.Context,
-	input RegisterPersonInputData,
-	presenter RegisterPersonPresenter,
+	input CreatePersonInputData,
+	presenter CreatePersonPresenter,
 ) error {
 	emoji, err := domain.NewEmoji(input.Emoji)
 	if err != nil {
@@ -44,7 +44,9 @@ func (uc *RegisterPersonInteractor) Execute(
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
-	registrarUUID, err := domain.NewUUID(input.RegistrarUUID)
+	// TODO: 認証機能実装後にコメントアウトを外す
+	// registerUUID, err := domain.NewUUID(input.RegisterUUID)
+	registerUUID, err := domain.NewUUID("a1a2b3c4-d5e6-7f89-0abc-def123456789")
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
@@ -77,7 +79,7 @@ func (uc *RegisterPersonInteractor) Execute(
 		domain.GenerateUUID(),
 		emoji,
 		sign,
-		registrarUUID,
+		registerUUID,
 		0, // SightingCount 新規登録時は0
 		sightingTime,
 		coordinates,
@@ -95,6 +97,6 @@ func (uc *RegisterPersonInteractor) Execute(
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrInternal, err))
 	}
 
-	output := RegisterPersonOutputData{UUID: person.UUID().String()}
+	output := CreatePersonOutputData{UUID: person.UUID().String()}
 	return presenter.Present(output)
 }

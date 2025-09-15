@@ -59,7 +59,7 @@ app.get('/auth/callback',
       Features: [],
       // ISO8601形式で送信（例: 2025-09-14T13:30:00+09:00）
       SightingTime: "2025-09-14T13:30:00+09:00",
-      RegistrarUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789",
+      RegisterUUID: "a1a2b3c4-d5e6-7f89-0abc-def123456789",
       Gender: "女性",
       Clothing: "制服",
       Accessories: "バッグ",

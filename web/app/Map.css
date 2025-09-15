@@ -1,0 +1,14 @@
+/* ZoomControlの位置を下から少し上にずらす */
+.leaflet-bottom.leaflet-right {
+  bottom: 60px !important;
+}
+/* 地図を画面全体に表示 */
+.leaflet-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* 通常カーソル */
+.leaflet-grab {
+  cursor: auto;
+}
