@@ -5,10 +5,10 @@ import type { GetPersonsResponse, PersonSummary } from './types/Persons';
 
 interface SearchAreaButtonProps {
   setPersons: (persons: PersonSummary[]) => void;
+  map: L.Map;
 }
 
-export default function SearchAreaButton({ setPersons }: SearchAreaButtonProps) {
-  const map = useMap();
+export default function SearchAreaButton({ setPersons, map }: SearchAreaButtonProps) {
   const handleClick = async () => {
     const bounds = map.getBounds();
     const params = {

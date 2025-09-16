@@ -2,14 +2,15 @@
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap, ZoomControl, useMapEvent } from 'react-leaflet';
-import L from 'leaflet';
+import L, { map } from 'leaflet';
 import SearchAreaButton from './SearchAreaButton';
 import { useEffect, useState } from 'react';
-
 import type { GetPersonsResponse, PersonSummary } from './types/Persons';
 import './initLeaflet';
 import './Map.css';
 import { GetPersonResponse, Person } from './types/Person';
+import type { CreatePersonPayload } from "./types/CreatePersonPayload";
+
 
 // centerが変わったら地図を移動するコンポーネント
 function ChangeMapCenter({ center }: { center: [number, number] }) {
@@ -34,7 +35,17 @@ const Overlay = ({ zIndex }: { zIndex: number }) => (
   }} />
 );
 
-import type { CreatePersonPayload } from "./types/CreatePersonPayload";
+const GetMapInstance = (
+  { setMapInstance }: { setMapInstance: (map: L.Map) => void }
+) => {
+  const map = useMap();
+  useEffect(() => {
+    console.log('Map instance:', map);
+    setMapInstance(map);
+  }, [map, setMapInstance]);
+  return null;
+};
+
 export interface MapProps {
   center: [number, number];
   getPersons: (uuid: string) => Promise<GetPersonsResponse>;
@@ -55,6 +66,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
   const [selectedEmoji, setSelectedEmoji] = useState<string>('');
   // クリック位置のstate（nullならcenterを使う）
   const [clickedPos, setClickedPos] = useState<[number, number] | null>(null);
+  const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
 
   // 地図クリック時に座標をアラートするコンポーネント
   // クリック位置のstateとポップアップ表示
@@ -460,8 +472,9 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
           </Marker>
-          <SearchAreaButton setPersons={setPersons} />
+          <GetMapInstance setMapInstance={setMapInstance} />
         </MapContainer>
+        {mapInstance && <SearchAreaButton setPersons={setPersons} map={mapInstance} />}
       </div>
       {/* 画面全体を覆う黒色透明オーバーレイ */}
       {/* <Overlay /> */}
