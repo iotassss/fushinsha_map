@@ -7,6 +7,7 @@ import LatLngSearchForm from './LatLngSearchForm';
 import { Person, GetPersonResponse } from './types/Person';
 import { GetPersonsResponse, PersonSummary } from './types/Persons';
 import type { CreatePersonPayload } from './types/CreatePersonPayload';
+import { GoogleMapSearch } from './GoogleMapSearch';
 
 const DEFAULT_CENTER: [number, number] = [35.681236, 139.767125];
 
@@ -47,6 +48,7 @@ export default function Home() {
   return (
     <>
       <h1>不審者マップ</h1>
+      <GoogleMapSearch />
       <LatLngSearchForm center={center} setCenter={setCenter} />
       <ClientMap
         center={center}
