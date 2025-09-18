@@ -54,9 +54,15 @@ export default function Home() {
         <div>
           <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
             <GoogleMapSearch />
-            <div>
-              ▶ 右クリックして座標をコピペ ▶
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+              <p>▶</p>
+              <div>
+                <p>Googleマップで</p>
+                <p>右クリックして</p>
+                <p>座標をコピペ</p>
+              </div>
             </div>
+            <p>▶</p>
             <LatLngSearchForm center={center} setCenter={setCenter} />
           </div>
         </div>
