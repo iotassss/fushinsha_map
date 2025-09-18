@@ -139,10 +139,12 @@ func toModel(person *domain.Person) PersonModel {
 	return personModel
 }
 
-func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area) ([]domain.Person, error) {
+func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area, limit int) ([]domain.Person, error) {
 	var models []PersonModel
 	err := r.db.WithContext(ctx).
 		Where("x BETWEEN ? AND ? AND y BETWEEN ? AND ?", area.LX(), area.RX(), area.BY(), area.TY()).
+		Order("RAND()").
+		Limit(limit).
 		Find(&models).Error
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", domain.ErrRepository, err)

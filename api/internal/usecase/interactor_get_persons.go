@@ -12,6 +12,8 @@ type GetPersonsInteractor struct {
 	personRepo domain.PersonRepository
 }
 
+const maxPersonsInArea = 100
+
 func NewGetPersonsInteractor(personRepo domain.PersonRepository) *GetPersonsInteractor {
 	return &GetPersonsInteractor{
 		personRepo: personRepo,
@@ -44,7 +46,7 @@ func (uc *GetPersonsInteractor) Execute(
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
-	persons, err := uc.personRepo.FindInArea(ctx, area)
+	persons, err := uc.personRepo.FindInArea(ctx, area, maxPersonsInArea)
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrInternal, err))
 	}
