@@ -51,6 +51,7 @@ export function GoogleMapSearch({ map, defaultQuery = '', newTab = true }: Googl
     <div>
       <form
         onSubmit={onSubmit}
+        style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
       >
         <input
           type="text"
@@ -80,12 +81,9 @@ export function GoogleMapSearch({ map, defaultQuery = '', newTab = true }: Googl
           }}
           aria-label="Google マップで検索"
         >
-          検索
+          Googleマップ検索
         </button>
       </form>
-      <div>
-        検索結果の場所で右クリックして座標をコピーして、戻ってきて、このサイトで座標入力して検索してください
-      </div>
     </div>
   );
 }

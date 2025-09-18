@@ -47,9 +47,20 @@ export default function Home() {
 
   return (
     <>
-      <h1>不審者マップ</h1>
-      <GoogleMapSearch />
-      <LatLngSearchForm center={center} setCenter={setCenter} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0.5rem' }}>
+        <h1 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '1rem' }}>
+          🤪 不審者マップ
+        </h1>
+        <div>
+          <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <GoogleMapSearch />
+            <div>
+              ▶ 右クリックして座標をコピペ ▶
+            </div>
+            <LatLngSearchForm center={center} setCenter={setCenter} />
+          </div>
+        </div>
+      </div>
       <ClientMap
         center={center}
         getPersons={getPersons}
