@@ -74,8 +74,10 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
     const [popupPos, setPopupPos] = useState<[number, number] | null>(null);
     const [popupMsg, setPopupMsg] = useState<string>('');
     useMapEvent('click', (event) => {
-      setPopupPos([event.latlng.lat, event.latlng.lng]);
-      setPopupMsg(`${event.latlng.lat}, ${event.latlng.lng}`);
+      const lat = Math.floor(event.latlng.lat * 10000) / 10000;
+      const lng = Math.floor(event.latlng.lng * 10000) / 10000;
+      setPopupPos([lat, lng]);
+      setPopupMsg(`${lat}, ${lng}`);
     });
     return (
       <>
