@@ -10,6 +10,7 @@ import './initLeaflet';
 import './Map.css';
 import { GetPersonResponse, Person } from './types/Person';
 import type { CreatePersonPayload } from "./types/CreatePersonPayload";
+import { Backdrop } from './Backdrop';
 
 
 // centerが変わったら地図を移動するコンポーネント
@@ -20,20 +21,6 @@ function ChangeMapCenter({ center }: { center: [number, number] }) {
   }, [center, map]);
   return null;
 }
-
-// 画面全体を覆う黒色透明オーバーレイ
-const Overlay = ({ zIndex }: { zIndex: number }) => (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    zIndex: zIndex,
-    pointerEvents: 'auto',
-  }} />
-);
 
 const GetMapInstance = (
   { setMapInstance }: { setMapInstance: (map: L.Map) => void }
@@ -162,7 +149,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
 
     return (
       <>
-        <Overlay zIndex={1999}/>
+        <Backdrop zIndex={1999}/>
         <div style={{
           position: 'fixed',
           top: 0,
@@ -486,7 +473,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
         {mapInstance && <SearchAreaButton setPersons={setPersons} map={mapInstance} />}
       </div>
       {/* 画面全体を覆う黒色透明オーバーレイ */}
-      {/* <Overlay /> */}
+      {/* <Backdrop /> */}
       モーダル表示
       {showModal && (
         <CreatePersonModal
