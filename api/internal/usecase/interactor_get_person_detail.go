@@ -39,12 +39,14 @@ func (uc *GetPersonDetailInteractor) Execute(
 			Emoji:         person.Emoji().String(),
 			Sign:          person.Sign().String(),
 			SightingCount: person.SightingCount().Int(),
+			SightingTime:  person.SightingTime().Time().Format("15:04"),
 			Gender:        person.Gender().String(),
 			Clothing:      person.Clothing().String(),
 			Accessories:   person.Accessories().String(),
 			Vehicle:       person.Vehicle().String(),
 			Behavior:      person.Behavior().String(),
 			Hairstyle:     person.Hairstyle().String(),
+			CreatedAt:     person.CreatedAt().Time.Format("2006-01-02T15:04:05Z07:00"),
 		},
 	}
 

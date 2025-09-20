@@ -23,18 +23,39 @@ export default function LatLngSearchForm({ center, setCenter }: LatLngSearchForm
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
-      <label>
-        緯度,経度:
+    <div>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
         <input
           type="text"
           value={latlng}
           onChange={e => setLatlng(e.target.value)}
           placeholder="35.9344771103889, 139.66427953115772"
-          style={{ marginRight: '1rem', width: '300px' }}
+          style={{
+            width: 260,
+            padding: '0.5rem 0.75rem',
+            fontSize: '1rem',
+            border: '1px solid #ddd',
+            borderRadius: 6,
+            outline: 'none',
+          }}
         />
-      </label>
-      <button type="submit">座標に移動</button>
-    </form>
+        <button
+          type="submit"
+          disabled={!latlng.trim()}
+          style={{
+            padding: '0.5rem 0.9rem',
+            fontSize: '0.95rem',
+            borderRadius: 6,
+            background: '#1a73e8',
+            color: '#fff',
+            border: 'none',
+            cursor: latlng.trim() ? 'pointer' : 'not-allowed',
+          }}
+          aria-label="座標に移動"
+        >
+          座標に移動
+        </button>
+      </form>
+    </div>
   );
 }

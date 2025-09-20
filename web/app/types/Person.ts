@@ -5,7 +5,7 @@ export interface Person {
 	emoji: string;
 	sign: string;
 	sighting_count: number;
-	sighting_times: string[]; // ISO8601文字列
+	sighting_time: string; // ISO8601文字列
 	categories: string[];
 	gender: string;
 	clothing: string;
@@ -13,6 +13,7 @@ export interface Person {
 	vehicle: string;
 	behavior: string;
 	hairstyle: string;
+	created_at: string; // ISO8601文字列
 }
 
 export interface GetPersonResponse {

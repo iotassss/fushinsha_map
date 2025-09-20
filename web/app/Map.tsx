@@ -2,14 +2,15 @@
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap, ZoomControl, useMapEvent } from 'react-leaflet';
-import L from 'leaflet';
+import L, { map } from 'leaflet';
 import SearchAreaButton from './SearchAreaButton';
 import { useEffect, useState } from 'react';
-
 import type { GetPersonsResponse, PersonSummary } from './types/Persons';
 import './initLeaflet';
 import './Map.css';
 import { GetPersonResponse, Person } from './types/Person';
+import type { CreatePersonPayload } from "./types/CreatePersonPayload";
+
 
 // centerが変わったら地図を移動するコンポーネント
 function ChangeMapCenter({ center }: { center: [number, number] }) {
@@ -34,7 +35,17 @@ const Overlay = ({ zIndex }: { zIndex: number }) => (
   }} />
 );
 
-import type { CreatePersonPayload } from "./types/CreatePersonPayload";
+const GetMapInstance = (
+  { setMapInstance }: { setMapInstance: (map: L.Map) => void }
+) => {
+  const map = useMap();
+  useEffect(() => {
+    console.log('Map instance:', map);
+    setMapInstance(map);
+  }, [map, setMapInstance]);
+  return null;
+};
+
 export interface MapProps {
   center: [number, number];
   getPersons: (uuid: string) => Promise<GetPersonsResponse>;
@@ -55,6 +66,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
   const [selectedEmoji, setSelectedEmoji] = useState<string>('');
   // クリック位置のstate（nullならcenterを使う）
   const [clickedPos, setClickedPos] = useState<[number, number] | null>(null);
+  const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
 
   // 地図クリック時に座標をアラートするコンポーネント
   // クリック位置のstateとポップアップ表示
@@ -62,8 +74,10 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
     const [popupPos, setPopupPos] = useState<[number, number] | null>(null);
     const [popupMsg, setPopupMsg] = useState<string>('');
     useMapEvent('click', (event) => {
-      setPopupPos([event.latlng.lat, event.latlng.lng]);
-      setPopupMsg(`${event.latlng.lat}, ${event.latlng.lng}`);
+      const lat = Math.floor(event.latlng.lat * 10000) / 10000;
+      const lng = Math.floor(event.latlng.lng * 10000) / 10000;
+      setPopupPos([lat, lng]);
+      setPopupMsg(`${lat}, ${lng}`);
     });
     return (
       <>
@@ -109,14 +123,20 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
 
     const handleSubmit = async () => {
       // TODO: バリデーションは後で実装
+
       // sightingTimeをISO8601形式に変換（今日の日付を付与）
       let isoSightingTime = '';
       if (sightingTime) {
-        const today = new Date();
+        // sightingTimeはJST（日本標準時）で入力されている前提
+        const now = new Date();
         const [hh, mm] = sightingTime.split(':');
-        today.setHours(Number(hh), Number(mm), 0, 0);
-        isoSightingTime = today.toISOString();
+        // JSTの年月日を取得
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        isoSightingTime = `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${hh.padStart(2, '0')}:${mm.padStart(2, '0')}:00+09:00`;
       }
+      console.log(isoSightingTime)
       const payload: CreatePersonPayload = {
         latitude,
         longitude,
@@ -399,7 +419,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>緯度:</span>{selectedPerson.latitude}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>経度:</span>{selectedPerson.longitude}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃数:</span>{selectedPerson.sighting_count}</div>
-              <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃時刻:</span>{Array.isArray(selectedPerson.sighting_times) ? selectedPerson.sighting_times.join(', ') : ''}</div>
+              <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃時刻:</span>{selectedPerson.sighting_time}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>カテゴリ:</span>{Array.isArray(selectedPerson.categories) ? selectedPerson.categories.join(', ') : ''}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>性別:</span>{selectedPerson.gender}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>服装:</span>{selectedPerson.clothing}</div>
@@ -447,6 +467,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
                 <div>
                   <div>{person.emoji}サイン:  {person.sign}</div>
                   <div>👀目撃数: {person.sighting_count}</div>
+                  <div>🕒️目撃時刻: {person.sighting_time}</div>
                 </div>
                 <div style={{ marginTop: '8px' }}>
                   <button style={{ cursor: 'pointer' , fontWeight: 'bold' }} onClick={() => handleButtonClick(person)}>👉️詳細を見る</button>
@@ -460,8 +481,9 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
           </Marker>
-          <SearchAreaButton setPersons={setPersons} />
+          <GetMapInstance setMapInstance={setMapInstance} />
         </MapContainer>
+        {mapInstance && <SearchAreaButton setPersons={setPersons} map={mapInstance} />}
       </div>
       {/* 画面全体を覆う黒色透明オーバーレイ */}
       {/* <Overlay /> */}

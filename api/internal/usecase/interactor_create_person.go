@@ -74,6 +74,10 @@ func (uc *CreatePersonInteractor) Execute(
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
+	createdAt, err := domain.NewCreatedAt(time.Now())
+	if err != nil {
+		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
+	}
 
 	person := domain.NewPerson(
 		domain.GenerateUUID(),
@@ -89,6 +93,7 @@ func (uc *CreatePersonInteractor) Execute(
 		vehicle,
 		behavior,
 		hairstyle,
+		createdAt,
 	)
 	if err := uc.personRepo.Create(ctx, &person); err != nil {
 		if errors.Is(err, domain.ErrAlreadyExists) {

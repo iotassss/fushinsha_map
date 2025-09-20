@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -81,20 +80,6 @@ func main() {
 	if err != nil {
 		slog.Error("failed to migrate database", slog.Any("error", err))
 		return
-	}
-
-	// dummy data
-	if env == "development" {
-		ctx := context.Background()
-		personRepo := gormrepo.NewPersonRepository(db)
-		if err := personRepo.ResetTable(ctx); err != nil {
-			slog.Error("failed to reset existing data during dummy data seeding", slog.Any("error", err))
-			return
-		}
-		if err := personRepo.SeedDummyPersons(ctx); err != nil {
-			slog.Error("failed to seed dummy data", slog.Any("error", err))
-			return
-		}
 	}
 
 	// repository

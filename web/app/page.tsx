@@ -7,6 +7,7 @@ import LatLngSearchForm from './LatLngSearchForm';
 import { Person, GetPersonResponse } from './types/Person';
 import { GetPersonsResponse, PersonSummary } from './types/Persons';
 import type { CreatePersonPayload } from './types/CreatePersonPayload';
+import { GoogleMapSearch } from './GoogleMapSearch';
 
 const DEFAULT_CENTER: [number, number] = [35.681236, 139.767125];
 
@@ -46,8 +47,26 @@ export default function Home() {
 
   return (
     <>
-      <h1>不審者マップ</h1>
-      <LatLngSearchForm center={center} setCenter={setCenter} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0.5rem' }}>
+        <h1 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '1rem' }}>
+          🤪 不審者マップ
+        </h1>
+        <div>
+          <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <GoogleMapSearch />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+              <p>▶</p>
+              <div>
+                <p>Googleマップで</p>
+                <p>右クリックして</p>
+                <p>座標をコピペ</p>
+              </div>
+            </div>
+            <p>▶</p>
+            <LatLngSearchForm center={center} setCenter={setCenter} />
+          </div>
+        </div>
+      </div>
       <ClientMap
         center={center}
         getPersons={getPersons}

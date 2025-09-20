@@ -1,6 +1,9 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type Coordinates struct {
 	latitude  float64
@@ -14,7 +17,14 @@ func NewCoordinates(lat, lng float64) (Coordinates, error) {
 	if lng < -180.0 || lng > 180.0 {
 		return Coordinates{}, fmt.Errorf("invalid longitude: %f", lng)
 	}
-	return Coordinates{latitude: lat, longitude: lng}, nil
+	roundedLat := roundTo4Decimal(lat)
+	roundedLng := roundTo4Decimal(lng)
+	return Coordinates{latitude: roundedLat, longitude: roundedLng}, nil
+}
+
+// 四捨五入して小数点以下4桁にする
+func roundTo4Decimal(val float64) float64 {
+	return math.Round(val*10000) / 10000
 }
 
 func (c Coordinates) Latitude() float64 {

@@ -12,22 +12,22 @@ import (
 )
 
 type PersonModel struct {
-	UUID         string  `gorm:"column:uuid;primaryKey;not null"`
-	Emoji        string  `gorm:"column:emoji;not null"`
-	Sign         string  `gorm:"column:sign;not null"`
-	RegisterUUID string  `gorm:"column:register_uuid;not null"`
-	SightedCount int     `gorm:"column:sighted_count"`
-	SightingTime string  `gorm:"column:sighting_time"`
-	X            float64 `gorm:"column:x;not null;uniqueIndex:idx_x_y"`
-	Y            float64 `gorm:"column:y;not null;uniqueIndex:idx_x_y"`
-	Gender       string  `gorm:"column:gender"`
-	Clothing     string  `gorm:"column:clothing"`
-	Accessories  string  `gorm:"column:accessories"`
-	Vehicle      string  `gorm:"column:vehicle"`
-	Behavior     string  `gorm:"column:behavior"`
-	Hairstyle    string  `gorm:"column:hairstyle"`
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	UUID         string    `gorm:"column:uuid;primaryKey;not null"`
+	Emoji        string    `gorm:"column:emoji;not null"`
+	Sign         string    `gorm:"column:sign;not null"`
+	RegisterUUID string    `gorm:"column:register_uuid;not null"`
+	SightedCount int       `gorm:"column:sighted_count"`
+	SightingTime string    `gorm:"column:sighting_time"`
+	X            float64   `gorm:"column:x;not null;uniqueIndex:idx_x_y"`
+	Y            float64   `gorm:"column:y;not null;uniqueIndex:idx_x_y"`
+	Gender       string    `gorm:"column:gender"`
+	Clothing     string    `gorm:"column:clothing"`
+	Accessories  string    `gorm:"column:accessories"`
+	Vehicle      string    `gorm:"column:vehicle"`
+	Behavior     string    `gorm:"column:behavior"`
+	Hairstyle    string    `gorm:"column:hairstyle"`
+	CreatedAt    time.Time `gorm:"column:created_at;autoCreateTime"`
+	UpdatedAt    time.Time `gorm:"column:updated_at;autoUpdateTime"`
 }
 
 func (PersonModel) TableName() string {
@@ -101,6 +101,10 @@ func toDomain(model PersonModel) (domain.Person, error) {
 	if err != nil {
 		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
+	createdAt, err := domain.NewCreatedAt(model.CreatedAt)
+	if err != nil {
+		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+	}
 	return domain.NewPerson(
 		uuid,
 		emoji,
@@ -115,6 +119,7 @@ func toDomain(model PersonModel) (domain.Person, error) {
 		vehicle,
 		behavior,
 		hairstyle,
+		createdAt,
 	), nil
 }
 
@@ -139,10 +144,12 @@ func toModel(person *domain.Person) PersonModel {
 	return personModel
 }
 
-func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area) ([]domain.Person, error) {
+func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area, limit int) ([]domain.Person, error) {
 	var models []PersonModel
 	err := r.db.WithContext(ctx).
 		Where("x BETWEEN ? AND ? AND y BETWEEN ? AND ?", area.LX(), area.RX(), area.BY(), area.TY()).
+		Order("RAND()").
+		Limit(limit).
 		Find(&models).Error
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", domain.ErrRepository, err)
