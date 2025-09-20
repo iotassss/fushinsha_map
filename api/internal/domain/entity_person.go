@@ -14,6 +14,7 @@ type Person struct {
 	vehicle       Vehicle       // 乗り物
 	behavior      Behavior      // 挙動
 	hairstyle     Hairstyle     // 髪型
+	createdAt     CreatedAt     // 登録日時
 }
 
 func NewPerson(
@@ -30,6 +31,7 @@ func NewPerson(
 	vehicle Vehicle,
 	behavior Behavior,
 	hairstyle Hairstyle,
+	createdAt CreatedAt,
 ) Person {
 	return Person{
 		uuid:          uuid,
@@ -45,6 +47,7 @@ func NewPerson(
 		vehicle:       vehicle,
 		behavior:      behavior,
 		hairstyle:     hairstyle,
+		createdAt:     createdAt,
 	}
 }
 
@@ -61,6 +64,7 @@ func (sp Person) Accessories() Accessories     { return sp.accessories }
 func (sp Person) Vehicle() Vehicle             { return sp.vehicle }
 func (sp Person) Behavior() Behavior           { return sp.behavior }
 func (sp Person) Hairstyle() Hairstyle         { return sp.hairstyle }
+func (sp Person) CreatedAt() CreatedAt         { return sp.createdAt }
 
 func (sp *Person) SetSightingCount(count SightingCount) {
 	sp.sightingCount = count

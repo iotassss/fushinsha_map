@@ -18,6 +18,7 @@ type PersonSummary struct {
 	Emoji         string  `json:"emoji"`
 	Sign          string  `json:"sign"`
 	SightingCount int     `json:"sighting_count"`
+	SightingTime  string  `json:"sighting_time"` // ISO8601文字列
 }
 
 type GetPersonsOutputData struct {

@@ -13,7 +13,7 @@ type PersonDetail struct {
 	Emoji         string   `json:"emoji"`
 	Sign          string   `json:"sign"`
 	SightingCount int      `json:"sighting_count"`
-	SightingTimes []string `json:"sighting_times"` // ISO8601文字列
+	SightingTime  string   `json:"sighting_time"` // ISO8601文字列
 	Categories    []string `json:"categories"`
 	Gender        string   `json:"gender"`
 	Clothing      string   `json:"clothing"`
@@ -21,6 +21,7 @@ type PersonDetail struct {
 	Vehicle       string   `json:"vehicle"`
 	Behavior      string   `json:"behavior"`
 	Hairstyle     string   `json:"hairstyle"`
+	CreatedAt     string   `json:"created_at"` // ISO8601文字列
 }
 
 type GetPersonDetailOutputData struct {

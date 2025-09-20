@@ -60,6 +60,7 @@ func (uc *GetPersonsInteractor) Execute(
 			Emoji:         p.Emoji().String(),
 			Sign:          p.Sign().String(),
 			SightingCount: p.SightingCount().Int(),
+			SightingTime:  p.SightingTime().String(),
 		}
 		outputData.Persons = append(outputData.Persons, summary)
 	}

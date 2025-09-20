@@ -123,14 +123,20 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
 
     const handleSubmit = async () => {
       // TODO: バリデーションは後で実装
+
       // sightingTimeをISO8601形式に変換（今日の日付を付与）
       let isoSightingTime = '';
       if (sightingTime) {
-        const today = new Date();
+        // sightingTimeはJST（日本標準時）で入力されている前提
+        const now = new Date();
         const [hh, mm] = sightingTime.split(':');
-        today.setHours(Number(hh), Number(mm), 0, 0);
-        isoSightingTime = today.toISOString();
+        // JSTの年月日を取得
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        isoSightingTime = `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${hh.padStart(2, '0')}:${mm.padStart(2, '0')}:00+09:00`;
       }
+      console.log(isoSightingTime)
       const payload: CreatePersonPayload = {
         latitude,
         longitude,
@@ -413,7 +419,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>緯度:</span>{selectedPerson.latitude}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>経度:</span>{selectedPerson.longitude}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃数:</span>{selectedPerson.sighting_count}</div>
-              <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃時刻:</span>{Array.isArray(selectedPerson.sighting_times) ? selectedPerson.sighting_times.join(', ') : ''}</div>
+              <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃時刻:</span>{selectedPerson.sighting_time}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>カテゴリ:</span>{Array.isArray(selectedPerson.categories) ? selectedPerson.categories.join(', ') : ''}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>性別:</span>{selectedPerson.gender}</div>
               <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>服装:</span>{selectedPerson.clothing}</div>
@@ -461,6 +467,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
                 <div>
                   <div>{person.emoji}サイン:  {person.sign}</div>
                   <div>👀目撃数: {person.sighting_count}</div>
+                  <div>🕒️目撃時刻: {person.sighting_time}</div>
                 </div>
                 <div style={{ marginTop: '8px' }}>
                   <button style={{ cursor: 'pointer' , fontWeight: 'bold' }} onClick={() => handleButtonClick(person)}>👉️詳細を見る</button>
