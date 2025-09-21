@@ -55,14 +55,6 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
   const [clickedPos, setClickedPos] = useState<[number, number] | null>(null);
   const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
 
-  // person詳細ボタン（ダミー）
-  const handleButtonClick = async (personSummary: PersonSummary) => {
-    const person = await getPerson(personSummary.uuid);
-    console.log('Person:', person);
-    setSelectedPerson(person.person);
-    setIsPanelOpen(true);
-  };
-
   useEffect(() => {
     console.log('Persons data updated:', persons);
     persons.forEach(person => {
@@ -96,8 +88,10 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
             <EmojiMarker
               key={person.uuid}
               person={person}
-              handleButtonClick={handleButtonClick}
               L={L}
+              getPerson={getPerson}
+              setSelectedPerson={setSelectedPerson}
+              setIsPanelOpen={setIsPanelOpen}
             />
           ))}
           <CenterMarker center={center} />

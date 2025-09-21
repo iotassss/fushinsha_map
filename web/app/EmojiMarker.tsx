@@ -1,15 +1,27 @@
 import { Marker, Popup } from "react-leaflet";
 import { PersonSummary } from "./types/Persons";
+import { GetPersonResponse, Person } from "./types/Person";
 
 export function EmojiMarker({
   person,
-  handleButtonClick,
   L,
+  getPerson,
+  setSelectedPerson,
+  setIsPanelOpen,
 }: {
   person: PersonSummary,
-  handleButtonClick: (person: PersonSummary) => void,
   L: typeof import('leaflet'),
+  getPerson: (uuid: string) => Promise<GetPersonResponse>;
+  setSelectedPerson: (person: Person | null) => void;
+  setIsPanelOpen: (isOpen: boolean) => void;
 }) {
+  const handleButtonClick = async (personSummary: PersonSummary) => {
+    const person = await getPerson(personSummary.uuid);
+    console.log('Person:', person);
+    setSelectedPerson(person.person);
+    setIsPanelOpen(true);
+  };
+
   return (
     <Marker
       key={person.uuid}
