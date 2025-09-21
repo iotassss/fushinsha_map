@@ -14,6 +14,7 @@ import { LeftSidePanel } from './LeftSidePanel';
 import { CreatePersonModal } from './CreatePersonModel';
 import { EmojiMarker } from './EmojiMarker';
 import { CenterMarker } from './CenterMarker';
+import { MapClickHandler } from './MapClickHandler';
 
 // centerが変わったら地図を移動するコンポーネント
 function ChangeMapCenter({ center }: { center: [number, number] }) {
@@ -56,46 +57,6 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
   const [clickedPos, setClickedPos] = useState<[number, number] | null>(null);
   const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
 
-  // 地図クリック時に座標をアラートするコンポーネント
-  // クリック位置のstateとポップアップ表示
-  function MapClickHandler() {
-    const [popupPos, setPopupPos] = useState<[number, number] | null>(null);
-    const [popupMsg, setPopupMsg] = useState<string>('');
-    useMapEvent('click', (event) => {
-      const lat = Math.floor(event.latlng.lat * 10000) / 10000;
-      const lng = Math.floor(event.latlng.lng * 10000) / 10000;
-      setPopupPos([lat, lng]);
-      setPopupMsg(`${lat}, ${lng}`);
-    });
-    return (
-      <>
-        {popupPos && (
-          <Popup position={popupPos} eventHandlers={{ popupclose: () => setPopupPos(null) }}>
-            <div>
-              <a
-                href={`https://www.google.com/maps?q=${popupPos[0]},${popupPos[1]}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#1976d2', textDecoration: 'underline' }}
-              >
-                {popupMsg}
-              </a>
-              <div
-                style={{ marginTop: '8px', fontWeight: 'bold', cursor: 'pointer', color: '#d32f2f' }}
-                onClick={() => {
-                  setClickedPos(popupPos);
-                  setShowModal(true);
-                }}
-              >
-                👇️ここに不審者情報を投稿する
-              </div>
-            </div>
-          </Popup>
-        )}
-      </>
-    );
-  }
-
   // person詳細ボタン（ダミー）
   const handleButtonClick = async (personSummary: PersonSummary) => {
     const person = await getPerson(personSummary.uuid);
@@ -124,7 +85,10 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
           wheelDebounceTime={10}
           zoomControl={false}
         >
-          <MapClickHandler />
+          <MapClickHandler
+            setClickedPos={setClickedPos}
+            setShowModal={setShowModal}
+          />
           <ZoomControl position="bottomright" />
           <ChangeMapCenter center={center} />
           <TileLayer
