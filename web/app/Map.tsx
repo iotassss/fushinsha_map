@@ -12,7 +12,7 @@ import { GetPersonResponse, Person } from './types/Person';
 import type { CreatePersonPayload } from "./types/CreatePersonPayload";
 import { LeftSidePanel } from './LeftSidePanel';
 import { CreatePersonModal } from './CreatePersonModel';
-
+import { EmojiMarker } from './EmojiMarker';
 
 // centerが変わったら地図を移動するコンポーネント
 function ChangeMapCenter({ center }: { center: [number, number] }) {
@@ -132,25 +132,12 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
           />
           {/* Emojiを各personの位置に表示 */}
           {persons.map(person => (
-            <Marker
+            <EmojiMarker
               key={person.uuid}
-              position={[person.latitude, person.longitude]}
-              icon={L.divIcon({
-                className: 'emoji-marker',
-                html: `<span style=\"font-size: 2rem;\">${person.emoji}</span>`
-              })}
-            >
-              <Popup>
-                <div>
-                  <div>{person.emoji}サイン:  {person.sign}</div>
-                  <div>👀目撃数: {person.sighting_count}</div>
-                  <div>🕒️目撃時刻: {person.sighting_time}</div>
-                </div>
-                <div style={{ marginTop: '8px' }}>
-                  <button style={{ cursor: 'pointer' , fontWeight: 'bold' }} onClick={() => handleButtonClick(person)}>👉️詳細を見る</button>
-                </div>
-              </Popup>
-            </Marker>
+              person={person}
+              handleButtonClick={handleButtonClick}
+              L={L}
+            />
           ))}
           {/* 中心点のマーカーはそのまま残す場合 */}
           <Marker position={center}>
