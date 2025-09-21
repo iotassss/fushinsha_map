@@ -16,6 +16,7 @@ export function CreatePersonModal({
   // 入力state
   const [sign, setSign] = useState('');
   const [gender, setGender] = useState('');
+  const [ageGroup, setAgeGroup] = useState('');
   const [clothing, setClothing] = useState('');
   const [accessories, setAccessories] = useState('');
   const [vehicle, setVehicle] = useState('');
@@ -46,6 +47,7 @@ export function CreatePersonModal({
       emoji: selectedEmoji,
       sign,
       gender,
+      ageGroup,
       clothing,
       accessories,
       vehicle,
@@ -147,6 +149,18 @@ export function CreatePersonModal({
                 <option value="男性">男性</option>
                 <option value="女性">女性</option>
                 <option value="不明">不明</option>
+              </select>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ display: 'block', marginBottom: 4 }}>年齢層</label>
+              <select value={ageGroup} onChange={e => setAgeGroup(e.target.value)} style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc' }}>
+                <option value="">未選択</option>
+                <option value="未成年">未成年</option>
+                <option value="20代">20代</option>
+                <option value="30代">30代</option>
+                <option value="40代">40代</option>
+                <option value="50代">50代</option>
+                <option value="60代以上">60代以上</option>
               </select>
             </div>
             <div style={{ marginBottom: 12 }}>

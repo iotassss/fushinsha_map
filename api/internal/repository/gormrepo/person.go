@@ -21,6 +21,7 @@ type PersonModel struct {
 	X            float64   `gorm:"column:x;not null;uniqueIndex:idx_x_y"`
 	Y            float64   `gorm:"column:y;not null;uniqueIndex:idx_x_y"`
 	Gender       string    `gorm:"column:gender"`
+	AgeGroup     string    `gorm:"column:age_group"`
 	Clothing     string    `gorm:"column:clothing"`
 	Accessories  string    `gorm:"column:accessories"`
 	Vehicle      string    `gorm:"column:vehicle"`
@@ -44,66 +45,70 @@ func NewPersonRepository(db *gorm.DB) *PersonRepository {
 	}
 }
 
-func toDomain(model PersonModel) (domain.Person, error) {
+func toDomain(model PersonModel) (*domain.Person, error) {
 	uuid, err := domain.NewUUID(model.UUID)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	emoji, err := domain.NewEmoji(model.Emoji)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	sign, err := domain.NewSign(model.Sign)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	registerUUID, err := domain.NewUUID(model.RegisterUUID)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	sightingCount, err := domain.NewSightingCount(model.SightedCount)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	st, err := time.Parse("15:04", model.SightingTime)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	sightingTime, err := domain.NewSightingTime(st)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	coordinates, err := domain.NewCoordinates(model.Y, model.X)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	gender, err := domain.NewGender(model.Gender)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+	}
+	ageGroup, err := domain.NewAgeGroup(model.AgeGroup)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	clothing, err := domain.NewClothing(model.Clothing)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	accessories, err := domain.NewAccessories(model.Accessories)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	vehicle, err := domain.NewVehicle(model.Vehicle)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	behavior, err := domain.NewBehavior(model.Behavior)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	hairstyle, err := domain.NewHairstyle(model.Hairstyle)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	createdAt, err := domain.NewCreatedAt(model.CreatedAt)
 	if err != nil {
-		return domain.Person{}, fmt.Errorf("%w: %v", domain.ErrValidation, err)
+		return nil, fmt.Errorf("%w: %v", domain.ErrValidation, err)
 	}
 	return domain.NewPerson(
 		uuid,
@@ -114,6 +119,7 @@ func toDomain(model PersonModel) (domain.Person, error) {
 		sightingTime,
 		coordinates,
 		gender,
+		ageGroup,
 		clothing,
 		accessories,
 		vehicle,
@@ -134,6 +140,7 @@ func toModel(person *domain.Person) PersonModel {
 		X:            person.Coordinates().Longitude(),
 		Y:            person.Coordinates().Latitude(),
 		Gender:       person.Gender().String(),
+		AgeGroup:     person.AgeGroup().String(),
 		Clothing:     person.Clothing().String(),
 		Accessories:  person.Accessories().String(),
 		Vehicle:      person.Vehicle().String(),
@@ -144,7 +151,7 @@ func toModel(person *domain.Person) PersonModel {
 	return personModel
 }
 
-func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area, limit int) ([]domain.Person, error) {
+func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area, limit int) ([]*domain.Person, error) {
 	var models []PersonModel
 	err := r.db.WithContext(ctx).
 		Where("x BETWEEN ? AND ? AND y BETWEEN ? AND ?", area.LX(), area.RX(), area.BY(), area.TY()).
@@ -155,7 +162,7 @@ func (r *PersonRepository) FindInArea(ctx context.Context, area domain.Area, lim
 		return nil, fmt.Errorf("%w: %v", domain.ErrRepository, err)
 	}
 
-	var result []domain.Person
+	var result []*domain.Person
 	for _, m := range models {
 		p, err := toDomain(m)
 		if err != nil {
@@ -182,7 +189,7 @@ func (r *PersonRepository) FindByUUID(ctx context.Context, uuid domain.UUID) (*d
 		return nil, err
 	}
 
-	return &p, nil
+	return p, nil
 }
 
 func (r *PersonRepository) Create(ctx context.Context, person *domain.Person) error {

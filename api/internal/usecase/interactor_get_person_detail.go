@@ -41,6 +41,7 @@ func (uc *GetPersonDetailInteractor) Execute(
 			SightingCount: person.SightingCount().Int(),
 			SightingTime:  person.SightingTime().Time().Format("15:04"),
 			Gender:        person.Gender().String(),
+			AgeGroup:      person.AgeGroup().String(),
 			Clothing:      person.Clothing().String(),
 			Accessories:   person.Accessories().String(),
 			Vehicle:       person.Vehicle().String(),

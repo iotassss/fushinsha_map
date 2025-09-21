@@ -8,6 +8,7 @@ export interface Person {
 	sighting_time: string; // ISO8601文字列
 	categories: string[];
 	gender: string;
+	ageGroup: string;
 	clothing: string;
 	accessories: string;
 	vehicle: string;

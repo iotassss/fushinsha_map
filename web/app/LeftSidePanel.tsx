@@ -90,6 +90,7 @@ export function LeftSidePanel({
             <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>目撃時刻:</span>{selectedPerson.sighting_time}</div>
             <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>カテゴリ:</span>{Array.isArray(selectedPerson.categories) ? selectedPerson.categories.join(', ') : ''}</div>
             <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>性別:</span>{selectedPerson.gender}</div>
+            <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>年齢層:</span>{selectedPerson.ageGroup}</div>
             <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>服装:</span>{selectedPerson.clothing}</div>
             <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>アクセサリー:</span>{selectedPerson.accessories}</div>
             <div style={{ marginBottom: 8 }}><span style={{ fontWeight: 'bold', marginRight: 8 }}>乗り物:</span>{selectedPerson.vehicle}</div>

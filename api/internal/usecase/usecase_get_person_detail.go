@@ -16,6 +16,7 @@ type PersonDetail struct {
 	SightingTime  string   `json:"sighting_time"` // ISO8601文字列
 	Categories    []string `json:"categories"`
 	Gender        string   `json:"gender"`
+	AgeGroup      string   `json:"age_group"`
 	Clothing      string   `json:"clothing"`
 	Accessories   string   `json:"accessories"`
 	Vehicle       string   `json:"vehicle"`
