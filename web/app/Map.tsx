@@ -13,6 +13,7 @@ import type { CreatePersonPayload } from "./types/CreatePersonPayload";
 import { LeftSidePanel } from './LeftSidePanel';
 import { CreatePersonModal } from './CreatePersonModel';
 import { EmojiMarker } from './EmojiMarker';
+import { CenterMarker } from './CenterMarker';
 
 // centerが変わったら地図を移動するコンポーネント
 function ChangeMapCenter({ center }: { center: [number, number] }) {
@@ -140,11 +141,7 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
             />
           ))}
           {/* 中心点のマーカーはそのまま残す場合 */}
-          <Marker position={center}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+          <CenterMarker center={center} />
           <GetMapInstance setMapInstance={setMapInstance} />
         </MapContainer>
         {mapInstance && <SearchAreaButton setPersons={setPersons} map={mapInstance} />}
