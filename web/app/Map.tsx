@@ -43,11 +43,9 @@ export interface MapProps {
   createPerson: (payload: CreatePersonPayload) => Promise<void>;
 }
 
-
 export default function Map({ center, getPerson, createPerson }: MapProps) {
   // パネルの開閉状態
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-
   // 地図・person関連のstate
   const [persons, setPersons] = useState<PersonSummary[]>([]);
   // person詳細表示用
@@ -75,7 +73,6 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
   return (
     <div style={{ position: 'relative' }}>
       <LeftSidePanel isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} selectedPerson={selectedPerson} />
-      {/* 既存の地図部分 */}
       <div>
         <MapContainer
           center={center}
@@ -95,7 +92,6 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {/* Emojiを各personの位置に表示 */}
           {persons.map(person => (
             <EmojiMarker
               key={person.uuid}
@@ -104,15 +100,11 @@ export default function Map({ center, getPerson, createPerson }: MapProps) {
               L={L}
             />
           ))}
-          {/* 中心点のマーカーはそのまま残す場合 */}
           <CenterMarker center={center} />
           <GetMapInstance setMapInstance={setMapInstance} />
         </MapContainer>
         {mapInstance && <SearchAreaButton setPersons={setPersons} map={mapInstance} />}
       </div>
-      {/* 画面全体を覆う黒色透明オーバーレイ */}
-      {/* <Backdrop /> */}
-      モーダル表示
       {showModal && (
         <CreatePersonModal
           latitude={clickedPos ? clickedPos[0] : center[0]}
