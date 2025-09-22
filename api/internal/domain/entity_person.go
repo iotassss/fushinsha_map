@@ -9,6 +9,7 @@ type Person struct {
 	sightingTime  SightingTime  // 目撃時刻
 	coordinates   Coordinates   // 座標
 	gender        Gender        // 性別
+	ageGroup      AgeGroup      // 年齢層
 	clothing      Clothing      // 服装
 	accessories   Accessories   // アクセサリー
 	vehicle       Vehicle       // 乗り物
@@ -26,14 +27,15 @@ func NewPerson(
 	sightingTime SightingTime,
 	coordinates Coordinates,
 	gender Gender,
+	ageGroup AgeGroup,
 	clothing Clothing,
 	accessories Accessories,
 	vehicle Vehicle,
 	behavior Behavior,
 	hairstyle Hairstyle,
 	createdAt CreatedAt,
-) Person {
-	return Person{
+) *Person {
+	return &Person{
 		uuid:          uuid,
 		emoji:         emoji,
 		sign:          sign,
@@ -42,6 +44,7 @@ func NewPerson(
 		sightingTime:  sightingTime,
 		coordinates:   coordinates,
 		gender:        gender,
+		ageGroup:      ageGroup,
 		clothing:      clothing,
 		accessories:   accessories,
 		vehicle:       vehicle,
@@ -59,6 +62,7 @@ func (sp Person) SightingCount() SightingCount { return sp.sightingCount }
 func (sp Person) SightingTime() SightingTime   { return sp.sightingTime }
 func (sp Person) Coordinates() Coordinates     { return sp.coordinates }
 func (sp Person) Gender() Gender               { return sp.gender }
+func (sp Person) AgeGroup() AgeGroup           { return sp.ageGroup }
 func (sp Person) Clothing() Clothing           { return sp.clothing }
 func (sp Person) Accessories() Accessories     { return sp.accessories }
 func (sp Person) Vehicle() Vehicle             { return sp.vehicle }

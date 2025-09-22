@@ -54,6 +54,10 @@ func (uc *CreatePersonInteractor) Execute(
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
 	}
+	ageGroup, err := domain.NewAgeGroup(input.AgeGroup)
+	if err != nil {
+		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
+	}
 	clothing, err := domain.NewClothing(input.Clothing)
 	if err != nil {
 		return presenter.PresentError(fmt.Errorf("%w: %v", ErrValidation, err))
@@ -88,6 +92,7 @@ func (uc *CreatePersonInteractor) Execute(
 		sightingTime,
 		coordinates,
 		gender,
+		ageGroup,
 		clothing,
 		accessories,
 		vehicle,
@@ -95,7 +100,7 @@ func (uc *CreatePersonInteractor) Execute(
 		hairstyle,
 		createdAt,
 	)
-	if err := uc.personRepo.Create(ctx, &person); err != nil {
+	if err := uc.personRepo.Create(ctx, person); err != nil {
 		if errors.Is(err, domain.ErrAlreadyExists) {
 			return presenter.PresentError(fmt.Errorf("%w: %v", ErrBusinessRule, err))
 		}

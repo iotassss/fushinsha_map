@@ -4,7 +4,7 @@ import "context"
 
 type PersonRepository interface {
 	// 指定範囲内の不審者をランダムにlimit件一覧取得
-	FindInArea(ctx context.Context, area Area, limit int) ([]Person, error)
+	FindInArea(ctx context.Context, area Area, limit int) ([]*Person, error)
 	// UUIDで不審者詳細取得
 	FindByUUID(ctx context.Context, uuid UUID) (*Person, error)
 	// 不審者新規登録

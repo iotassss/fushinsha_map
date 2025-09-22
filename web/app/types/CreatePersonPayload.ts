@@ -4,6 +4,7 @@ export interface CreatePersonPayload {
   emoji: string;
   sign: string;
   gender: string;
+  ageGroup: string;
   clothing: string;
   accessories: string;
   vehicle: string;

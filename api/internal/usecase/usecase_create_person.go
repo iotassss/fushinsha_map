@@ -10,6 +10,7 @@ type CreatePersonInputData struct {
 	SightingTime string // ISO8601
 	RegisterUUID string
 	Gender       string
+	AgeGroup     string
 	Clothing     string
 	Accessories  string
 	Vehicle      string

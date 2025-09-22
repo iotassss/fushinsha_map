@@ -17,6 +17,7 @@ type PersonModel struct {
 	X            float64 // 経度
 	Y            float64 // 緯度
 	Gender       string
+	AgeGroup     string
 	Clothing     string
 	Accessories  string
 	Vehicle      string
@@ -51,7 +52,7 @@ func main() {
 		lat := randInRange(minLat, maxLat)
 		emoji := randEmoji()
 		uuid := fmt.Sprintf("%08x-%04x-%04x-%04x-%012x", rand.Uint32(), rand.Uint32()&0xffff, rand.Uint32()&0xffff, rand.Uint32()&0xffff, rand.Uint64()&0xffffffffffff)
-		fmt.Printf("\t{ UUID: %q, Emoji: %q, Sign: %q, RegisterUUID: %q, SightedCount: %d, SightingTime: %q, X: %.4f, Y: %.4f, Gender: %q, Clothing: %q, Accessories: %q, Vehicle: %q, Behavior: %q, Hairstyle: %q },\n",
+		fmt.Printf("\t{ UUID: %q, Emoji: %q, Sign: %q, RegisterUUID: %q, SightedCount: %d, SightingTime: %q, X: %.4f, Y: %.4f, Gender: %q, AgeGroup: %q, Clothing: %q, Accessories: %q, Vehicle: %q, Behavior: %q, Hairstyle: %q },\n",
 			uuid,
 			emoji,
 			"Z",
@@ -60,7 +61,8 @@ func main() {
 			"13:30",
 			lon,
 			lat,
-			"女性",
+			"不明",
+			"20代",
 			"制服",
 			"バッグ",
 			"自動車",

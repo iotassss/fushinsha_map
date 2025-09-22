@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/iotassss/fushinsha-map-api/internal/repository/gormrepo"
+	"github.com/iotassss/fushinsha-map-api/internal/seeder"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -79,8 +80,10 @@ func main() {
 
 	ctx := context.Background()
 	personRepo := gormrepo.NewPersonRepository(db)
-	if err := personRepo.SeedDummyPersons(ctx); err != nil {
-		slog.Error("failed to seed dummy data", slog.Any("error", err))
+	seeder := seeder.NewSeeder(personRepo)
+
+	if err := seeder.SeedPersons(ctx, 1000); err != nil {
+		slog.Error("failed to seed data", slog.Any("error", err))
 		return
 	}
 }
