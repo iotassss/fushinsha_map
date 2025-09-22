@@ -18,7 +18,7 @@ export default function SearchAreaButton({ setPersons, map }: SearchAreaButtonPr
       by: bounds.getSouthWest().lat,
     };
     try {
-      const res = await axios.get<GetPersonsResponse>('http://localhost:8080/api/persons', { params });
+      const res = await axios.get<GetPersonsResponse>(`${process.env.NEXT_PUBLIC_RESOURCE_SERVER_BASE_URL}/persons`, { params });
       setPersons(res.data.persons || []);
     } catch (e) {
       console.error(e);
