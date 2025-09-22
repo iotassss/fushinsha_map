@@ -8,6 +8,7 @@ import { Person, GetPersonResponse } from './types/Person';
 import { GetPersonsResponse, PersonSummary } from './types/Persons';
 import type { CreatePersonPayload } from './types/CreatePersonPayload';
 import { GoogleMapSearch } from './GoogleMapSearch';
+import styles from './page.module.css';
 
 const DEFAULT_CENTER: [number, number] = [35.681236, 139.767125];
 
@@ -42,29 +43,27 @@ const createPerson = async (payload: CreatePersonPayload): Promise<void> => {
   }
 };
 
-export default function Home() {
+export default function Page() {
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '0.5rem' }}>
-        <h1 style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '1rem' }}>
+      <div className={styles.headerContainer}>
+        <h1>
           🤪 不審者マップ
         </h1>
-        <div>
-          <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-            <GoogleMapSearch />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-              <p>▶</p>
-              <div>
-                <p>Googleマップで</p>
-                <p>右クリックして</p>
-                <p>座標をコピペ</p>
-              </div>
+        <div className={styles.wordCoordinatesSearch}>
+          <GoogleMapSearch />
+          <p className={styles.arrow}>▶</p>
+          <div className={styles.wordCoordinatesSearch}>
+            <div className={styles.wordCoordinatesSearchText}>
+              <p>Googleマップで</p>
+              <p>右クリックして</p>
+              <p>座標をコピペ</p>
             </div>
-            <p>▶</p>
-            <LatLngSearchForm center={center} setCenter={setCenter} />
           </div>
+          <p className={styles.arrow}>▶</p>
+          <LatLngSearchForm center={center} setCenter={setCenter} />
         </div>
       </div>
       <ClientMap
