@@ -11,10 +11,11 @@ import { GoogleMapSearch } from './GoogleMapSearch';
 import styles from './page.module.css';
 
 const DEFAULT_CENTER: [number, number] = [35.681236, 139.767125];
+const apiUrl = process.env.NEXT_PUBLIC_RESOURCE_SERVER_BASE_URL;
 
 const getPersons = async (uuid: string): Promise<GetPersonsResponse> => {
   try {
-    const response = await axios.get<GetPersonsResponse>(`http://localhost:8080/api/persons/${uuid}`);
+    const response = await axios.get<GetPersonsResponse>(`${apiUrl}/persons`);
     if (!response.data) throw new Error('No person data found');
     return response.data;
   } catch (error) {
@@ -24,7 +25,7 @@ const getPersons = async (uuid: string): Promise<GetPersonsResponse> => {
 
 const getPerson = async (uuid: string): Promise<GetPersonResponse> => {
   try {
-    const response = await axios.get<GetPersonResponse>(`http://localhost:8080/api/persons/${uuid}`);
+    const response = await axios.get<GetPersonResponse>(`${apiUrl}/persons/${uuid}`);
     if (!response.data) throw new Error('No person data found');
     return response.data;
   } catch (error) {
@@ -34,7 +35,7 @@ const getPerson = async (uuid: string): Promise<GetPersonResponse> => {
 
 const createPerson = async (payload: CreatePersonPayload): Promise<void> => {
   try {
-    const res = await axios.post('http://localhost:8080/api/persons', payload);
+    const res = await axios.post(`${apiUrl}/persons`, payload);
     if (!res || res.status < 200 || res.status >= 300) {
       throw new Error('Failed to submit');
     }
